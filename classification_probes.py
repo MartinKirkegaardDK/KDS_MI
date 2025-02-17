@@ -137,10 +137,13 @@ class HookManager():
         def steering_hook(module, input):
             activation = input[0]
 
-            projection_magnitudes = (activation @ steering_vector).unsqueeze(-1)
-            steering_vector_ = steering_vector.view(1, 1, -1)
+            steering_norm = steering_vector / torch.norm(steering_vector)
+            
+            projection_magnitudes = (activation @ steering_norm).unsqueeze(-1)
+            
+            steering_norm_ = steering_norm.view(1, 1, -1)
 
-            projections = (projection_magnitudes * steering_vector_)
+            projections = projection_magnitudes * steering_norm_
 
             modified = activation + scalar * projections
 
