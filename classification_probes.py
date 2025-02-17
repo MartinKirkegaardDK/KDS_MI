@@ -147,7 +147,10 @@ class HookManager():
 
             modified = activation + scalar * projections
 
-            modified = modified * (torch.norm(activation, dim=2) / torch.norm(modified, dim=2))
+            act_norm = torch.norm(activation, dim=2).unsqueeze(-1)
+            modified_norm = torch.norm(activation, dim=2).unsqueeze(-1)
+
+            modified = modified * (act_norm / modified_norm)
 
             return (modified,) + input[1:] if len(input) > 1 else (modified,)
         
