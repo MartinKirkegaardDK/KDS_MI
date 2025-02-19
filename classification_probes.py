@@ -2,6 +2,29 @@ import torch
 from torch import nn
 from torch.utils.data import Dataset
 from translate.storage.tmx import tmxfile
+import sklearn.metrics as metrics
+import numpy as np
+
+
+class ActivationDataset(Dataset):
+
+    def __init__(self):
+        self.acts = []
+        self.labels = []
+
+    def add_with_mask(self, acts, labels, masks):
+        for act, label, mask in zip(acts, labels, masks):
+            if mask:
+                self.acts.append(act)
+                self.labels.append(label)
+
+    def __getitem__(self, index) -> tuple:
+        return (self.acts[index], self.labels[index])
+
+    def __len__(self) -> int:
+        return len(self.acts)
+
+
 
 class TextClassificationDataset(Dataset):
 
@@ -181,6 +204,36 @@ class ClassificationProbe(nn.Module):
             out_features=num_labs,
             device=device
         )
+        self.device = device
+        self.accuracy = None
+        self.all_preds = []
+        self.all_labels = []
+    
+    def compute_scores(self):
+        all_preds = torch.cat(self.all_preds).to(self.device)
+        all_labels = torch.cat(self.all_labels).to(self.device)
+        self.accuracy = metrics.accuracy_score(all_labels, all_preds)
+        self.confusion_matrix  = metrics.confusion_matrix(all_labels.cpu().numpy(), all_preds.cpu().numpy())
+        self.class_accuracies = self.class_accuracies(self.confusion_matrix)
+
+    def class_accuracies(self,confusion_matrix):
+        # Number of classes (assumes confusion_matrix is square)
+        n_classes = confusion_matrix.shape[0]
+        
+        accuracies = dict()
+        
+        for i in range(n_classes):
+            # True positives for class i (diagonal element)
+            TP = confusion_matrix[i, i]
+            
+            # False negatives for class i (sum of the column excluding diagonal)
+            FN = np.sum(confusion_matrix[:, i]) - TP
+            
+            # Calculate accuracy for class i
+            accuracy_i = TP / (TP + FN) if (TP + FN) > 0 else 0.0  # Avoid division by zero
+            accuracies[i] = accuracy_i
+        
+        return accuracies
 
     def forward(self, x):
 
