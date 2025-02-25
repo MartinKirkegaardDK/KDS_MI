@@ -213,8 +213,9 @@ class ClassificationProbe(nn.Module):
         all_preds = torch.cat(self.all_preds).cpu()
         all_labels = torch.cat(self.all_labels).cpu()
         self.accuracy = metrics.accuracy_score(all_labels, all_preds)
-        self.confusion_matrix  = metrics.confusion_matrix(all_labels.cpu().numpy(), all_preds.cpu().numpy())
-        self.class_accuracies = self.class_accuracies(self.confusion_matrix)
+        self.classification_report = metrics.classification_report(all_labels, all_preds, output_dict = True)
+        #self.confusion_matrix  = metrics.confusion_matrix(all_labels.cpu().numpy(), all_preds.cpu().numpy())
+        #self.class_accuracies = self.class_accuracies(self.confusion_matrix)
 
     def class_accuracies(self,confusion_matrix):
         # Number of classes (assumes confusion_matrix is square)

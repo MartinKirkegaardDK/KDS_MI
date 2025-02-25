@@ -1,6 +1,27 @@
+from torch.utils.data import DataLoader
+from matplotlib import pyplot as plt
+from copy import deepcopy
+import random
+from scipy.stats import sem, t
+import numpy as np
+from classification_probes import ActivationDataset, ProbeTrainer, TextClassificationDataset, HookManager, ClassificationProbe
+import torch
+from torch import nn
+from torch.utils.data import DataLoader, Dataset
+from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
+from collections import defaultdict
+from typing import Dict, List, Tuple, Any
+from tqdm import tqdm
+import sklearn.metrics as metrics
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 
 
-def plot_confidence_intervals(results,reg):
+from matplotlib.ticker import PercentFormatter
+import seaborn as sns
+
+def plot_confidence_intervals(results,meta_data, map_lab):
     label_stats = defaultdict(lambda: defaultdict(list))
     
     # Collect all values per label per layer
@@ -61,7 +82,7 @@ def plot_confidence_intervals(results,reg):
 
     plt.show()
 
-def train_probe(meta_data,probe_by_layer,act_loader_by_layer):
+def train_probe(meta_data,probe_by_layer,act_loader_by_layer, device):
 
 
     for layer, probe in probe_by_layer.items():
@@ -99,8 +120,87 @@ def train_probe(meta_data,probe_by_layer,act_loader_by_layer):
         probe.compute_scores()
 
 
+def model_setup(model_name):
 
-def create_classes_by_layer(meta_data, activation_ds_by_layer):
+    # Initialize Variables
+    #model_name = "AI-Sweden-Models/gpt-sw3-356m"
+    
+    device = "cuda:0" if torch.cuda.is_available() else "cpu"
+    # Initialize Tokenizer & Model
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModelForCausalLM.from_pretrained(model_name)
+    model.eval()
+    model.to(device)
+    return model, tokenizer, device
+
+
+def get_activations(meta_data: dict, 
+    loader: DataLoader, 
+    tokenizer: AutoTokenizer, 
+    device: str,
+    model:AutoModelForCausalLM,
+    ) -> dict(): 
+
+    res_stream_act_by_layer = dict()
+    activation_ds_by_layer = {
+        layer: ActivationDataset()
+        for layer in range(meta_data["hidden_layers"])
+    }
+
+    for ind, (text, label) in enumerate(tqdm(loader)):
+
+        if ind > 5:
+            break
+
+        tokenized = tokenizer(
+            text,
+            padding=True,
+            truncation=True,
+            return_tensors='pt'
+        ).to(device)
+
+        with HookManager(model) as hook_manager:
+            for layer in range(meta_data["hidden_layers"]):
+                res_stream_act_by_layer[layer] = hook_manager.attach_residstream_hook(
+                    layer=layer,
+                    pre_mlp=False,
+                    pythia=False
+                )
+
+            model(**tokenized)
+
+        # flattening [batch, pad_size, ...] to [tokens, ...]
+        attn_mask = tokenized.attention_mask.flatten() # [tokens]
+        label = label.unsqueeze(-1).expand(-1, tokenized.attention_mask.shape[1]).flatten() # [tokens]
+
+        for layer in range(meta_data["hidden_layers"]):
+            res_stream_act_by_layer[layer] = res_stream_act_by_layer[layer][0].view(-1, meta_data["hidden_size"]) # [tokens, hidden_size]
+            activation_ds_by_layer[layer].add_with_mask(res_stream_act_by_layer[layer], label, attn_mask)
+    return activation_ds_by_layer
+
+
+def load_data() -> DataLoader:
+
+    lab_map = {
+        'nb': 0,
+        'en': 1,
+        'is': 2,
+        'sv': 3,
+        'da': 4
+    }
+
+
+    data_loc = 'data/antibiotic/'
+    ds = TextClassificationDataset.from_txt(data_loc + 'nb.txt', lab_map['nb'])
+    ds.add_from_txt(data_loc + 'en.txt', lab_map['en'])
+    ds.add_from_txt(data_loc + 'is.txt', lab_map['is'])
+    ds.add_from_txt(data_loc + 'da.txt', lab_map['da'])
+    ds.add_from_txt(data_loc + 'sv.txt', lab_map['sv'])
+    loader = DataLoader(ds, batch_size=32, shuffle=True)
+
+    return loader
+
+def create_classes_by_layer(meta_data: dict, activation_ds_by_layer: dict, device: str):
     probe_by_layer = {
         layer: ClassificationProbe(in_dim=meta_data["hidden_size"], num_labs=meta_data["number_labels"], device=device)
         for layer in range(meta_data["hidden_layers"])
@@ -130,12 +230,12 @@ def create_bootstrap_dataset(activation_ds_by_layer):
         copy_dataset[layer].labels = new_labels
     return copy_dataset
 
-def bootstrap(n, meta_data,activation_ds_by_layer):
+def bootstrap(n, meta_data,activation_ds_by_layer, device):
     li = []
     for i in range(n):
         new_activation_ds_by_layer = create_bootstrap_dataset(activation_ds_by_layer)
-        probe_by_layer, act_loader_by_layer = create_classes_by_layer(meta_data, new_activation_ds_by_layer)
-        train_probe(meta_data, probe_by_layer,act_loader_by_layer)
+        probe_by_layer, act_loader_by_layer = create_classes_by_layer(meta_data, new_activation_ds_by_layer, device)
+        train_probe(meta_data, probe_by_layer,act_loader_by_layer, device)
         li.append(probe_by_layer)
     return li
     
