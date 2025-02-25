@@ -210,8 +210,8 @@ class ClassificationProbe(nn.Module):
         self.all_labels = []
     
     def compute_scores(self):
-        all_preds = torch.cat(self.all_preds).to(self.device)
-        all_labels = torch.cat(self.all_labels).to(self.device)
+        all_preds = torch.cat(self.all_preds).cpu()
+        all_labels = torch.cat(self.all_labels).cpu()
         self.accuracy = metrics.accuracy_score(all_labels, all_preds)
         self.confusion_matrix  = metrics.confusion_matrix(all_labels.cpu().numpy(), all_preds.cpu().numpy())
         self.class_accuracies = self.class_accuracies(self.confusion_matrix)
