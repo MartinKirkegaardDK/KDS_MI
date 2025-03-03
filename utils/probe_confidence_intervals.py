@@ -4,7 +4,9 @@ from copy import deepcopy
 import random
 from scipy.stats import sem, t
 import numpy as np
-from classification_probes import ActivationDataset, ProbeTrainer, TextClassificationDataset, HookManager, ClassificationProbe
+from classes.datahandling import ActivationDataset, TextClassificationDataset
+from classes.models import ClassificationProbe
+from classes.hook_manager import HookManager
 import torch
 from torch import nn
 from torch.utils.data import DataLoader, Dataset
@@ -179,27 +181,6 @@ def get_activations(meta_data: dict,
     return activation_ds_by_layer
 
 
-def load_data() -> DataLoader:
-
-    lab_map = {
-        'nb': 0,
-        'en': 1,
-        'is': 2,
-        'sv': 3,
-        'da': 4
-    }
-
-
-    data_loc = 'data/antibiotic/'
-    ds = TextClassificationDataset.from_txt(data_loc + 'nb.txt', lab_map['nb'])
-    ds.add_from_txt(data_loc + 'en.txt', lab_map['en'])
-    ds.add_from_txt(data_loc + 'is.txt', lab_map['is'])
-    ds.add_from_txt(data_loc + 'da.txt', lab_map['da'])
-    ds.add_from_txt(data_loc + 'sv.txt', lab_map['sv'])
-    loader = DataLoader(ds, batch_size=32, shuffle=True)
-
-    return loader
-
 def create_classes_by_layer(meta_data: dict, activation_ds_by_layer: dict, device: str):
     probe_by_layer = {
         layer: ClassificationProbe(in_dim=meta_data["hidden_size"], num_labs=meta_data["number_labels"], device=device)
@@ -217,7 +198,7 @@ def create_bootstrap_dataset(activation_ds_by_layer):
     copy_dataset = deepcopy(activation_ds_by_layer)
 
     for layer in copy_dataset.keys():
-        activations = copy_dataset[layer].acts
+        activations = copy_dataset[layer].predictors
         labels = copy_dataset[layer].labels
         
         len_dataset = len(activations)
@@ -226,7 +207,7 @@ def create_bootstrap_dataset(activation_ds_by_layer):
         new_acts = [activations[index] for index in indicies]
         new_labels = [labels[index] for index in indicies]
 
-        copy_dataset[layer].acts = new_acts
+        copy_dataset[layer].predictors = new_acts
         copy_dataset[layer].labels = new_labels
     return copy_dataset
 
