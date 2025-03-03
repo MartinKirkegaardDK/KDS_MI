@@ -5,13 +5,13 @@ from pathlib import Path
 
 
 def load_txt_data(
-    file_extension='txt',
-    **kwargs: str) -> TextClassificationDataset:
+    file_paths: dict[str, str],
+    file_extension='txt') -> TextClassificationDataset:
     '''
     Load text data from multiple language files.
     
     Args:
-        **kwargs: Language code to file path mappings where each keyword argument name represents a language code (e.g., 'en', 'da', 'sv') and each value is the corresponding file path.
+        file_paths (dict): Language code to file path mappings where each key represents a language code (e.g., 'en', 'da', 'sv') and each value is the corresponding file path.
         file_extention: str in {'txt', 'tml'}   
         min_sentence_length: int for min amount of tokens in sentences loaded.
     
@@ -19,7 +19,7 @@ def load_txt_data(
         TextClassificationDataset: a dataset for each language, with labels [0;n-1] corresponding to each language
     '''
 
-    lan_codes, file_paths = zip(*kwargs.items())
+    lan_codes, file_paths = zip(*file_paths.items())
 
     if file_extension != 'txt':
         raise NotImplementedError('Other type extensions that "txt" have not been implemented')
