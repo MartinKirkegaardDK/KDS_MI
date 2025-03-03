@@ -17,6 +17,9 @@ class ClassificationDataset(Dataset):
         else:
             self.label_map = label_map
 
+    @property
+    def map_label(self):
+        return {value: key for key, value in self.label_map.items()}
 
     def __getitem__(self, index) -> tuple:
         return (self.predictors[index], self.labels[index])
