@@ -10,7 +10,7 @@ def generate_with_steering(
         steering_vector: torch.Tensor,
         steering_lambda: int = 1,
         amount_samples: int = 10,
-        cut_off: int = 20) -> list[str]:
+        cut_off: int = 10) -> list[str]:
     '''
     Generates text from a set of prompts. The prompts will be cut up after a certain amount of tokens, and continued by the model under steering
 
@@ -45,12 +45,12 @@ def generate_with_steering(
             text, _ = text_prompts[i]
             tokenized = tokenizer(text, return_tensors='pt').to(device)
             undecoded_output = model.generate(
-                tokenized.input_ids[:cut_off], 
+                tokenized.input_ids[:, :cut_off], 
                 max_length=100, 
                 temperature=0.7, 
                 top_p=0.9, 
                 do_sample=True
             )
-            outputs.append(tokenizer.decode(undecoded_output[0]))
+            outputs.append(tokenizer.decode(undecoded_output[0]).replace('\n', '  '))
 
     return outputs

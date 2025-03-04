@@ -42,8 +42,9 @@ def run(steering_vector_path, affected_language, layer):
         layer=layer,
         text_prompts=text_prompts,
         steering_vector=steering_vector,
-        steering_lambda=1,
-        amount_samples=amount_samples
+        steering_lambda=8,
+        amount_samples=amount_samples,
+        cut_off=10
     )
 
     for output in outputs:
