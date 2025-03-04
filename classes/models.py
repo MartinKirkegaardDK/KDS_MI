@@ -23,10 +23,11 @@ class ClassificationProbe(nn.Module):
     def compute_scores(self): 
         all_preds = torch.cat(self.all_preds).cpu()
         all_labels = torch.cat(self.all_labels).cpu()
+    
 
         self.find_used_labels()
         self.accuracy = metrics.accuracy_score(all_labels, all_preds)
-        self.classification_report = metrics.classification_report(all_labels, all_preds, output_dict = True)
+        self.classification_report = metrics.classification_report(all_labels, all_preds, output_dict = True, zero_division = 1)
         
         self.class_accuracies = self.class_accuracies(self.classification_report)
     
@@ -42,7 +43,7 @@ class ClassificationProbe(nn.Module):
         d = dict()
         for label in self.used_labels:
             
-            d[label] = self.classification_report[str(label)]["f1-score"]
+            d[int(label)] = self.classification_report[str(label)]["f1-score"]
         return d 
 
 

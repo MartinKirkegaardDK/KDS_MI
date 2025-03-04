@@ -96,6 +96,10 @@ def run():
         plot_confidence_intervals(d, meta_data, map_lab)
 
         # saves data used in plots
+        
+        d['map_label'] = map_lab
+        
         reg_lambda_output_file = data_output_folder / f'{model_name.replace('/', '-')}_reg_lambda_{meta_data["reg_lambda"]}.json'
         with open(str(reg_lambda_output_file), 'w') as file:
-            json.dump(d, file)
+            json.dump(d, file, indent=4)
+

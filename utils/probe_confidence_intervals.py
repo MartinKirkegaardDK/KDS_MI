@@ -124,9 +124,7 @@ def train_probe(meta_data,probe_by_layer,act_loader_by_layer, device):
 
 def model_setup(model_name):
 
-    # Initialize Variables
-    #model_name = "AI-Sweden-Models/gpt-sw3-356m"
-    
+
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
     # Initialize Tokenizer & Model
     tokenizer = AutoTokenizer.from_pretrained(model_name)
