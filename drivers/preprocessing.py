@@ -17,7 +17,7 @@ def run():
     )
 
     # removs the sentences which are too short
-    #   (we found that for out particular data, there was a lot of short repeated sentences)
+    # (we found that for out particular data, there was a lot of short repeated sentences)
     filter_short_sentences(ds, min_sentence_length=40)
 
     # splits into test and train and saves them in data/preprocessed
