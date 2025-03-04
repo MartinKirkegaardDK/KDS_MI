@@ -5,8 +5,8 @@ from pathlib import Path
 
 
 def load_txt_data(
-    file_paths: dict[str, str],
-    file_extension='txt') -> TextClassificationDataset:
+        file_paths: dict[str, str],
+        file_extension='txt') -> TextClassificationDataset:
     '''
     Load text data from multiple language files.
     
@@ -35,8 +35,8 @@ def load_txt_data(
 
 
 def filter_short_sentences(
-    ds: TextClassificationDataset,
-    min_sentence_length=30):
+        ds: TextClassificationDataset,
+        min_sentence_length=30):
     '''
     Removes sentences from TextClassificationDataset that are under a certain length (amount of characters)
 
@@ -56,10 +56,10 @@ def filter_short_sentences(
     
 
 def split_text_data(
-    ds: TextClassificationDataset,
-    out_folder: str,
-    split: tuple = (0.9, 0.1),
-    seed: int = 42):
+        ds: TextClassificationDataset,
+        out_folder: str,
+        split: tuple = (0.9, 0.1),
+        seed: int = 42):
     '''
     Splits text data into train and test
 
