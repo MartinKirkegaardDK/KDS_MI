@@ -62,6 +62,33 @@ class HookManager():
         self.hooks.append(
             self.model.get_submodule(hookpoint).register_forward_pre_hook(steering_hook)
         )
+    
+    def attach_residual_stream_activation_based_steering_vector(self, layer, steering_vector, plus, scalar = 1, pre_mlp=False, pythia=False):
+        #This is martins' 
+        
+        if pre_mlp:
+            if pythia:
+                hookpoint = f'gpt_neox.layers.{layer}.mlp'
+            else:
+                hookpoint = f'transformer.h.{layer}.mlp'
+        else:
+            if pythia:
+                hookpoint = f'gpt_neox.layers.{layer}.attention'
+            else:
+                hookpoint = f'transformer.h.{layer}.attn'
+        
+        def steering_hook(module, input):
+            activation = input[0]
+            if plus:
+                activation = activation + steering_vector * scalar
+            else:
+                activation = activation - steering_vector * scalar
+            return activation
+
+        self.hooks.append(
+            self.model.get_submodule(hookpoint).register_forward_pre_hook(steering_hook)
+        )
+
         
         
 
