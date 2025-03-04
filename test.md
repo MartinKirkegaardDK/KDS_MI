@@ -9,3 +9,4 @@
 		- maybe perplexity (loss on parallel data under steering)
 	- evaluation of text after steering
 		- language id model to see which language text is (this would also check if output is coherent?)
+		- (using parallel data) give it the first half of a lan1 text and measure loss on the continued text. then compare that to if the first half was lan2 but it has been steered towards lan1.
