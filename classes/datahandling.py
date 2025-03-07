@@ -2,6 +2,43 @@ from torch.utils.data import Dataset, Subset
 from translate.storage.tmx import tmxfile
 
 
+class ParallelDataset(Dataset):
+    def __init__(self, sentences: dict[str, list]):
+        assert len(set([len(language) for language in sentences.values()])) == 1 
+
+        self.sentences = sentences
+        self.languages = list(self.sentences.keys())
+
+    def __getitem__(self, index) -> tuple:
+        return {language: self.sentences[language][index] for language in self.languages}
+
+    def __len__(self) -> int:
+        return len(self.sentences[self.languages[0]])
+    
+    @classmethod
+    def from_tmx(cls, filename, lan1, lan2):
+        
+        with open(filename, 'rb') as file:
+            tmx_file = tmxfile(
+                inputfile=file, 
+                sourcelanguage=lan1, 
+                targetlanguage=lan2)
+
+        lan1_sentences = []
+        lan2_sentences = []
+        for node in tmx_file.unit_iter():
+            if node.source == '' or node.target == '': #filter empty sentences
+                continue
+            lan1_sentences.append(node.source)
+            lan2_sentences.append(node.target)
+
+        new_obj = cls(sentences={lan1: lan1_sentences, lan2: lan2_sentences})
+
+        return new_obj
+
+
+
+
 class ClassificationDataset(Dataset):
 
     def __init__(self, predictors, labels, label_map=None):
