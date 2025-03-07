@@ -35,13 +35,14 @@ def generate_with_steering(
     outputs = []
 
     with HookManager(model) as hook_manager:
+
         hook_manager.attach_residual_stream_activation_based_steering_vector(
             layer=layer,
             steering_vector=steering_vector,
             plus=True,
             scalar=steering_lambda,
             pre_mlp=False,
-            pythia=False
+            pythia=True if isinstance(model, GPTNeoXForCausalLM) else False
         )
 
         for i in range(amount_samples):
@@ -94,7 +95,7 @@ def loss_with_steering(
             plus=True,
             scalar=steering_lambda,
             pre_mlp=False,
-            pythia=False
+            pythia=True if isinstance(model, GPTNeoXForCausalLM) else False
         )
 
         # tokenizes the prompt and the continuation
