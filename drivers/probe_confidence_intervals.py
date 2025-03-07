@@ -5,8 +5,8 @@ from pathlib import Path
 import json
 
 from utils.probe_confidence_intervals import model_setup, bootstrap, plot_confidence_intervals,get_activations
-from utils.probe_confidence_intervals import create_classes_by_layer,train_probe
-from utils.preprocessing import load_txt_data, filter_short_sentences
+from utils.probe_confidence_intervals import create_classes_by_layer
+from utils.preprocessing import load_txt_data
 
 import numpy as np
 from collections import defaultdict

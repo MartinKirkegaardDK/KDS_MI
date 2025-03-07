@@ -4,24 +4,19 @@ from copy import deepcopy
 import random
 from scipy.stats import sem, t
 import numpy as np
-from classes.datahandling import ActivationDataset, TextClassificationDataset
+from classes.datahandling import ActivationDataset
 from classes.models import ClassificationProbe
 from classes.hook_manager import HookManager
 import torch
 from torch import nn
-from torch.utils.data import DataLoader, Dataset
+from torch.utils.data import DataLoader
 from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
 from collections import defaultdict
-from typing import Dict, List, Tuple, Any
 from tqdm import tqdm
-import sklearn.metrics as metrics
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 
 
-from matplotlib.ticker import PercentFormatter
-import seaborn as sns
 
 def plot_confidence_intervals(results,meta_data, map_lab):
     label_stats = defaultdict(lambda: defaultdict(list))
@@ -139,7 +134,7 @@ def get_activations(meta_data: dict,
     tokenizer: AutoTokenizer, 
     device: str,
     model:AutoModelForCausalLM,
-    ) -> dict(): 
+    ) -> dict: 
 
     res_stream_act_by_layer = dict()
     activation_ds_by_layer = {
