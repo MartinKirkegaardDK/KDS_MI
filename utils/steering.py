@@ -8,20 +8,20 @@ def generate_with_steering(
         model: GPTNeoXForCausalLM | GPT2Model,
         tokenizer: PreTrainedTokenizerBase,
         layer: int,
-        text_prompts: TextClassificationDataset,
+        text_prompts: TextClassificationDataset | list[str],
         steering_vector: torch.Tensor,
         steering_lambda: int = 1,
         amount_samples: int = 10,
         cut_off: int = 10
     ) -> list[str]:
     '''
-    Generates text from a set of prompts. The prompts will be cut up after a certain amount of tokens, and continued by the model under steering
+    Generates text from a set of prompts. The prompts will be cut up after a certain amount of tokens, and continued by the model under steering. If prompts are provided as TextClassificationDataset, they are automatically cut up randomly.
 
     Args:
         model: the torch model
         tokenizer: the model's tokenizer
         layer: the layer of model to attach steering vector
-        text_prompts: a TextClassificationDataset containing the prompts
+        text_prompts: a TextClassificationDataset containing the prompts OR a list of prompts
         steering_vector: the torch.Tensor steering vector
         steering_lambda: the scalar which will scale the steering vector before it being applied
         amount_sample: the amount of sentence generations to perform
@@ -32,6 +32,9 @@ def generate_with_steering(
     '''
 
     device = model.parameters().__next__().device
+
+    #
+    is_textclassdataset = isinstance(text_prompts, TextClassificationDataset)
     outputs = []
 
     with HookManager(model) as hook_manager:
@@ -44,12 +47,17 @@ def generate_with_steering(
             pre_mlp=False,
             pythia=True if isinstance(model, GPTNeoXForCausalLM) else False
         )
-
-        for i in range(amount_samples):
-            text, _ = text_prompts[i]
+        
+        for i in range(min(amount_samples, len(text_prompts))):
+            if is_textclassdataset:
+                text, _ = text_prompts[i]
+            else:
+                text = text_prompts[i]
+    
             tokenized = tokenizer(text, return_tensors='pt').to(device)
+
             undecoded_output = model.generate(
-                tokenized.input_ids[:, :cut_off], 
+                inputs=tokenized.input_ids[:, :cut_off] if is_textclassdataset else tokenized.input_ids, 
                 max_length=100, 
                 temperature=0.7, 
                 top_p=0.9, 
