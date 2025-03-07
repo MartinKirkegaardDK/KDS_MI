@@ -8,7 +8,7 @@ def load_txt_data(
         file_paths: dict[str, str],
         file_extension='txt') -> TextClassificationDataset:
     '''
-    Load text data from multiple language files.
+    Loads text data from multiple language files.
     
     Args:
         file_paths (dict): Language code to file path mappings where each key represents a language code (e.g., 'en', 'da', 'sv') and each value is the corresponding file path.

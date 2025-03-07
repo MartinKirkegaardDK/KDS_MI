@@ -13,7 +13,6 @@ def run(steering_vector_path, affected_language, layer):
 
     # loads data
     data_folder = Path('data/preprocessed/train')
-    print("Load data")
     ds = load_txt_data(
         file_paths={
             'da': data_folder / 'da.txt',
