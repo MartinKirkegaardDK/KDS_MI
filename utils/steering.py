@@ -1,10 +1,12 @@
 import torch
+from transformers import PreTrainedTokenizerBase, GPTNeoXForCausalLM, GPT2Model
+
 from classes.datahandling import TextClassificationDataset
 from classes.hook_manager import HookManager
 
 def generate_with_steering(
-        model,
-        tokenizer,
+        model: GPTNeoXForCausalLM | GPT2Model,
+        tokenizer: PreTrainedTokenizerBase,
         layer: int,
         text_prompts: TextClassificationDataset,
         steering_vector: torch.Tensor,
@@ -17,7 +19,7 @@ def generate_with_steering(
 
     Args:
         model: the torch model
-        tokenizer: its tokenizer
+        tokenizer: the model's tokenizer
         layer: the layer of model to attach steering vector
         text_prompts: a TextClassificationDataset containing the prompts
         steering_vector: the torch.Tensor steering vector
@@ -52,14 +54,15 @@ def generate_with_steering(
                 top_p=0.9, 
                 do_sample=True
             )
+
             outputs.append(tokenizer.decode(undecoded_output[0]).replace('\n', '  '))
 
     return outputs
 
 
 def loss_with_steering(
-        model,
-        tokenizer,
+        model: GPTNeoXForCausalLM | GPT2Model,
+        tokenizer: PreTrainedTokenizerBase,
         layer: int,
         prompt: str,
         continuation: str,
@@ -71,7 +74,7 @@ def loss_with_steering(
 
     Args:
         model: the torch model
-        tokenizer: its tokenizer
+        tokenizer: the model's tokenizer
         layer: the layer of model to attach steering vector
         prompt: the text prompt, given as context for prediction
         continuation: the ground truth continuation, used for computing loss
