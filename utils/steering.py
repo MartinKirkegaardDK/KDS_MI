@@ -8,7 +8,7 @@ def generate_with_steering(
         model: GPTNeoXForCausalLM | GPT2Model,
         tokenizer: PreTrainedTokenizerBase,
         layer: int,
-        text_prompts: TextClassificationDataset | list[str],
+        text_prompts: TextClassificationDataset | list[str] | str,
         steering_vector: torch.Tensor,
         steering_lambda: int = 1,
         amount_samples: int = 10,
@@ -33,10 +33,9 @@ def generate_with_steering(
 
     device = model.parameters().__next__().device
 
-    #### BROKEN BECAUSE OF SOME DEVICE MISMATCH
-
-    #
     is_textclassdataset = isinstance(text_prompts, TextClassificationDataset)
+    if type(text_prompts) == str:
+        text_prompts = [text_prompts]
     outputs = []
 
     with HookManager(model) as hook_manager:
