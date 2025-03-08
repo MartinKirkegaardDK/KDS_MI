@@ -33,6 +33,8 @@ def generate_with_steering(
 
     device = model.parameters().__next__().device
 
+    #### BROKEN BECAUSE OF SOME DEVICE MISMATCH
+
     #
     is_textclassdataset = isinstance(text_prompts, TextClassificationDataset)
     outputs = []
@@ -41,7 +43,7 @@ def generate_with_steering(
 
         hook_manager.attach_residual_stream_activation_based_steering_vector(
             layer=layer,
-            steering_vector=steering_vector,
+            steering_vector=steering_vector.to(device),
             plus=True,
             scalar=steering_lambda,
             pre_mlp=False,
@@ -99,7 +101,7 @@ def loss_with_steering(
     with HookManager(model) as hook_manager:
         hook_manager.attach_residual_stream_activation_based_steering_vector(
             layer=layer,
-            steering_vector=steering_vector,
+            steering_vector=steering_vector.to(device),
             plus=True,
             scalar=steering_lambda,
             pre_mlp=False,
