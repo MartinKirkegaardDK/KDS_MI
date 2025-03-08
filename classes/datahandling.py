@@ -35,7 +35,49 @@ class ParallelDataset(Dataset):
         new_obj = cls(sentences={lan1: lan1_sentences, lan2: lan2_sentences})
 
         return new_obj
+    
 
+class ParallelNSPDataset(Dataset):
+    def __init__(self, sentence_pairs: dict[str, list[tuple]]):
+        assert len(set([len(language) for language in sentence_pairs.values()])) == 1 
+
+        self.sentence_pairs = sentence_pairs
+        self.languages = list(self.sentence_pairs.keys())
+
+    def __getitem__(self, index) -> tuple:
+        return {language: self.sentence_pairs[language][index] for language in self.languages}
+
+    def __len__(self) -> int:
+        return len(self.sentence_pairs[self.languages[0]])
+    
+    @classmethod
+    def from_tmx(cls, filename, lan1, lan2):
+        
+        with open(filename, 'rb') as file:
+            tmx_file = tmxfile(
+                inputfile=file, 
+                sourcelanguage=lan1, 
+                targetlanguage=lan2)
+
+        lan1_sentences = []
+        lan2_sentences = []
+        for node in tmx_file.unit_iter():
+            if node.source == '' or node.target == '': #filter empty sentences
+                continue
+            lan1_sentences.append(node.source)
+            lan2_sentences.append(node.target)
+
+
+        lan1_sentence_pairs = []
+        lan2_sentence_pairs = []
+
+        for i in range(len(lan2_sentences) - 1):
+            lan1_sentence_pairs.append((lan1_sentences[i], lan1_sentences[i + 1]))
+            lan2_sentence_pairs.append((lan2_sentences[i], lan2_sentences[i + 1]))
+
+        new_obj = cls(sentence_pairs={lan1: lan1_sentence_pairs, lan2: lan2_sentence_pairs})
+
+        return new_obj
 
 
 
