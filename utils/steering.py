@@ -21,7 +21,7 @@ def generate_with_steering(
         model: the torch model
         tokenizer: the model's tokenizer
         layer: the layer of model to attach steering vector
-        text_prompts: a TextClassificationDataset containing the prompts OR a list of prompts
+        text_prompts: a TextClassificationDataset containing the prompts OR a list of prompts OR one prompt as str
         steering_vector: the torch.Tensor steering vector
         steering_lambda: the scalar which will scale the steering vector before it being applied
         amount_sample: the amount of sentence generations to perform
