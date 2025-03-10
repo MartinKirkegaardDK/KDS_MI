@@ -8,5 +8,6 @@
 	- other method for where to insert probes
 		- maybe perplexity (loss on parallel data under steering)
 	- evaluation of text after steering
-		- language id model to see which language text is (this would also check if output is coherent?)
+		- language id model to see which language text is (this would also check if output is coherent?) (in martin words: run/train language model
+		to classify which language text is (is it english or danish) on generated text form the steered model output. e.i we put english in, steer it to danish, run classification model on output to quantify if this text is danish. )
 		- (using parallel data) give it the first half of a lan1 text and measure loss on the continued text. then compare that to if the first half was lan2 but it has been steered towards lan1.

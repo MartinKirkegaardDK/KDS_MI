@@ -19,7 +19,7 @@ def run(model_name:str,target_language: str,complement_languages:list, run_name:
 
     model, tokenizer, device = model_setup(model_name)
 
-    raw_data_folder = Path('data/antibiotic/')
+    raw_data_folder = Path('data/preprocessed/train')
     print("Load data")
     
     languages = complement_languages + [target_language]

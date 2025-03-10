@@ -126,6 +126,7 @@ def model_setup(model_name):
     model = AutoModelForCausalLM.from_pretrained(model_name)
     model.eval()
     model.to(device)
+    print("found device:",device)
     return model, tokenizer, device
 
 
