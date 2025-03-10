@@ -47,11 +47,13 @@ def filter_short_sentences(
     Returns:
         None (It modifies the dataset in-place)
     '''
-
-    for idx, (sentence, label) in enumerate(ds):
-        if len(sentence) < min_sentence_length:
+    idx = 0
+    while idx < len(ds):
+        if len(ds.predictors[idx]) < min_sentence_length:
             del ds.predictors[idx]
             del ds.labels[idx]
+        else:
+            idx += 1
 
     
 

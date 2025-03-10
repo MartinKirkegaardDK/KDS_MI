@@ -1,55 +1,53 @@
-Antibiotika er misbrukt når de er unødvendig foreskrevet (f.eks., antibiotikabehandling er ikke klinisk nødvendig) eller når de er uhensiktsmessig foreskrevet, f.eks., en av de følgende [18]:
-Det er store variasjoner i bruken av antibiotika i EU-/EØS-landene.
-Brev som nasjonale folkehelsemyndigheter kan sende til farmasøyter og forskrivere i primærhelsetjenesten for å presentere Den europeiske antibiotikadagen, for å fremme riktig bruk av antibiotika og for å informere pasientene om risikoene ved selvmedisinering med antibiotika.
-Hovedbudskap for farmasøyter på sykehuset
-Hvis vi tar antibiotika gjentatte ganger og feil, bidrar vi til økningen av antibiotikaresistente bakterier, et av verdens største helseproblemer [1-6].
-Bli venn med oss på Facebook: http://www.facebook.com/EAAD.EU
-7 av 10 antimikrobielle midler ble administrert parenteralt.
-vaksinasjon av helsearbeidere langsmed yrkeshygiene,
-Paolo måtte gjennom tre sett med ulike antibiotikabehandlinger, og etter to måneder ga infeksjonen seg.
-Bare en lege kan stille riktig diagnose og ta avgjørelsen om hvorvidt det er nødvendig med antibiotika.
-Lær opp helsepersonell på regelmessig basis for hvordan de implementerer effektive strategier for forebygging og kontroll [82,85] [ekspertbeslutning].
-Dette antibiotikumet kan synes å være følsomt i laboratoriet, men er vanligvis ikke effektivt mot ESBL E. coli når det gis til behandling av mennesker.
-Kliniske oppgaver relatert til å forbedre bruk av antibiotika inkluderer [102] [ekspertbeslutning]:
-Et faktaark om antibiotikaresistens i primærhelsetjenesten gir forskrivere opplysninger om den siste utviklingen nasjonalt og i EU.
-Påse at beboerne (og deres familier) forstår årsakene for antibiotikaterapi, og hovedpunktene relatert til antibiotikabruk, inkludert det å [31,69] [ekspertbeslutning]:
-Opplære alt relevant helsepersonell i forebygging av infeksjoner og kontrollintervensjoner for å redusere overføringen av både antibiotikaresistente og antibiotika-mottakelige bakterier.
-Overvåking av antibiotikaresistens og bruk, og gjøre denne informasjonen tilgjengelig til foreskrivere.
-Oppfordre klinikere til å utføre hensiktsmessige og regulerte parenteralt-til-oralt bytte [56].
-Disse reduserer behandlingsvarigheter og reduserer den totale behandlingskostnaden [77].
-Bruk av antibiotika fører til at bakterier blir resistente mot antibiotikabehandling [3, 4, 5], derfor er det viktig å ikke ta antibiotika på feil grunnlag eller på uriktig måte [1, 2, 9].
-Hver dag får én av tre pasienter minst ett antimikrobielt middel.
-Samsvar med en behandlingsprotokoll for sentrallinje (for innføring og vedlikehold), reduserer infeksjoner i blodstrømmen forbundet med sentrallinjen i alle typer intensivavdelinger (voksne og neonatale) [107].
-Du har en nøkkelposisjon for å forbedre bruk av antibiotika ved å samarbeide med forvaltningsteamet for antibiotika
-Skjermbeskytter
-Egenmedisinering med antibiotika er ikke ansvarlig bruk av antibiotika [8].
-En andel av reseptene på antimikrobielle midler for medisinsk profylakse kan derfor representere unødvendig bruk.
-Når det gjelder sykehussektoren, viser de siste dataene fra ECDC at bruken av karbapenemer - et bredspektret antibiotikum - økte betydelig i seks land, og ingen land hadde nedgang.
-Om disse retningslinjene ikke eksisterer på sykehuset der du jobber, støtt utviklingen av disse [31,54,56].
-Styring av disse risikoene samt av faktorene som bidrar til å kontrollere smittsomme sykdommer er den enkelte medlemsstats ansvar.
-HAI-er på sykehus alene forårsaker flere dødsfall i Europa enn noen annen smittsom sykdom under overvåkning ved ECDC.
+Hva er hovedbudskapene og hvordan er de tenkt brukt?
+Forfrem samsvar med bevisbaserte retningslinjer for diagnostisering og kontroll av vanlige infeksjoner, og for periooperativ antibiotisk profylakse.
+Hellas - Et tre-års multifasettert program for infeksjonskontroll for å kontrollere spredningen av carbapenem-resistente bakterier på en hematologisk avdeling ved et tertiærsykehus ledet til færre infeksjoner forårsaket av disse bakteriene [88].
+76 % av sykehusene rapporterte å ha tilgjengelige retningslinjer for antimikrobiell bruk.
+Hva gjør du for å #LaAntibiotikaFortsattFungere?
+Følg tiltak for forebyggelse og kontroll av infeksjon som allerede er etablert på arbeidsplassen din.
+For pasienter med en alvorlig infeksjon, start en effektiv antibiotikabehandling så snart som mulig [31,74].
+Oppstart av antibiotikabehandling så snart som mulig for pasienter med alvorlig infeksjon;
+Antimikrobielle midler for å behandle infeksjoner er livreddende, men overforbruk av antimikrobielle midler kan føre til hyppigere bivirkninger og fremvekst av multiresistente mikroorganismer.
+Deltakelse i regelmessige pedagogiske aktiviteter, så vel som proaktive revisjoner og tilbakemelding sammen med forvaltningsteamet for antibiotika [54,56].
+ECDC har også lansert - og oppdaterer regelmessig - en katalog med nettressurser for forebygging av og kontroll med antimikrobiell resistens og sykehusinfeksjoner som støtte for EU-medlemsstater som skal utarbeide nasjonale retningslinjer.
+Støtte bevisbaserte retningslinjer på sykehuset for antibiotika for vanlige infeksjoner og kirurgisk profylakse;
+Langvarig kirurgisk profylakse representerer en betydelig kilde til unødvendig bruk av antimikrobielle midler på sykehus, noe som må takles over hele Europa.
+Dokumentere indikasjon, medisinvalg, dosering, administrasjonsmåte og varigheten av behandlingen i pasientjournalen leder til bedre bruk av antibiotika [71].
+PPS, som gir et dynamisk bilde av antallet pasienter med infeksjon på sykehuset på et visst tidspunkt, og
 faktaark, informasjonsmateriell, materiell i verktøykassen -
-1/3 av pasienter får minst ett antimikrobielt middel på en gitt dag.
-Hovedpunkter for forskrivere i primærhelsetjenesten
-Misbruk av antibiotika fører bare til at bakterier blir resistente mot antibiotikabehandling [3, 4, 5].
-Alle andre må innhente tillatelse fra ECDC før bruk av kommunikasjonsmateriellet til Den europeiske antibiotikadagen.
-Antimikrobiale kontrollinitiativer som fremmer fornuftig bruk av antibiotika kalles forvaltningsprogrammer for antibiotika [19,42-45]
-Lær opp foreskrivere på sykehuset om hvordan de diagnostiserer og behandler vanlige infeksjoner, og i prinsippene som gjelder forvaltning av antibiotika;
-Helsetjenesteassosierte infeksjoner (HAI) og antimikrobiell resistens i europeiske akuttsykehus og langtidsinstitusjoner
-I august 2010 dro han alene med båten sin til Ponza, en liten øy utenfor kysten av Italia.
-Økning av helbredelsesmengden for infeksjon og redusere behandlingssvikt;
-Egenmedisinering med antibiotika er ikke ansvarlig bruk av antibiotika
-ECDC-katalogen( lenken ) inneholder nettbaserte ressurser for forebygging og kontroll av infeksjoner forbundet med helsevesenet.
-Antibiotikaterapi er ikke evaluert etter 48 - 72 timer, eller valget av antibiotika er ikke rasjonalisert når mikrobiologisk dyrkningsdata blir tilgjengelig.
-Det er enda utvist hvordan han pådrog seg infeksjonen.
-Symptomene forsvant etter dette, og han har vært frisk siden.
-Forvaltningsprogrammer for antibiotika kan bidra til [42,45,46] [ekspertbeslutning]:
-Antimikrobielle midler blir ofte forskrevet og bidrar til utvikling av antimikrobiell resistens i langtidsinstitusjoner (LTCF).
-Om du ser personell på sykehuset eller behandlingsstedet som bryter retningslinjer eller protokoller, spør hvorfor de gjør det og gi dem verktøy for å kunne forstå hva de gjør feil [ekspertbeslutning].
-Frankrike- Begrensning av bruk av fluorkinoloner reduserte forbruk av denne klassen antibiotika og reduserte hyppigheten av meticillin-resistent Staphylococcus aureus på et universitetssykehus [58].
-Slike multimedisin-resistente bakterier er en alvorlig og konstant trussel mot klinisk praksis i alle helsemiljøer i Europa [1].
-Paolo er en 55 år gammel universitetsprofessor i Roma i Italia.
-Forkortet varighet av parenteral terapi uten å negativt påvirke kliniske resultater) [56].
-Overvåk hvor effektivt målsatte forebyggende tiltak er i forhold til reduksjon i overføring av antibiotikaresistente bakterier [82,85] [ekspertbeslutning].
+Vi setter pris på at det ikke legges til grafiske elementer, med unntak av ekstra logoer.
+Ta i betraktning disse meldingene i tillegg til de for de spesifikke målgruppene som er relatert til ditt spesialfelt.
 Færre effektive antibiotikabehandlinger for immunsuppressive pasienter og de som skal gjennom operasjoner;
-Infografikken forklarer hva antibiotikaresistens er, og setter søkelyset på omfanget av problemene vi står overfor på grunn av antibiotikaresistens og antibiotikabruk hos mennesker - både på sykehus og ute i samfunnet.
+Pasienter, leger, sykepleiere: Det er alles ansvar å bruke antibiotika fornuftig.
+Hvis du arrangerer en kommunikasjonskampanje for å øke bevisstheten om fornuftig bruk av antibiotika, kan du bruke våre verktøykasser og kampanjemateriell .
+For å støtte kommunikasjonsaktiviteter på nasjonalt nivå har ECDC produsert flere kommunikasjonsverktøy i form av maler med evidensbaserte budskap som kan tilpasses for bruk på nasjonalt nivå.
+Én dose er vanligvis tilstrekkelig for kirurgisk profylakse.
+Det er viktig å understreke at malene inneholder grunnleggende informasjon og felles budskap, men at dette materiellet vil være mest effektivt hvis det tilpasses til behovet og situasjonen i det enkelte land, eller til og med i den enkelte helseinstitusjon.
+Misbruk av antibiotika øker forekomsten av Clostridium difficile infeksjoner [19-22].
+Mal for brev til forskrivere i primærhelsetjenesten
+Støtt ditt tverrfaglige forvaltningsteam for antibiotika ved å utpeke spesifikke ledere for ansvarlighet og medisinkunnskap, og ved å legge frem de støttede rollene for andre hovedgrupper [42,71].
+En andel av reseptene på antimikrobielle midler for medisinsk profylakse kan derfor representere unødvendig bruk.
+Men det vil være mest effektivt dersom det tilpasses for å dekke behovene og situasjonene i hvert land, til og med i hvert sykehus eller helseinstitusjon.
+Forbedring av antibiotikabruk på akutten kan lede til bedre antibiotikabruk over hele organisasjonen, fordi akuttavdelingen er et felles inngangspunkt for sykehuspasienter [77].
+Polen - Utvikling av retningslinjer for foreskriving av antibiotika og forhåndsautorisasjon for begrensede antibiotika reduserte det totale antibiotikaforbruket på en barneavdeling [66].
+Økt resistens mot bredspektret antibiotika: 2013
+Paolo kunne ikke ta trimetoprim-sulfametoksazol, som er et peroralt antibakterielt middel, ettersom han var allergisk mot det.
+Forsøk aldri å kjøpe antibiotika uten resept.
+ECDC har utarbeidet en evidensbasert mal for pasientdialog med sikte på å fremme riktig bruk av antibiotika hos pasientene.
+Det er viktig å behandle med riktig antibiotika, ettersom disse typene resistente bakterier kan gjøre pasientene sykere og gi et verre utfall.
+Antibiotika er ikke løsningen for sykdommer som skyldes virus, som vanlig forkjølelse eller influensa.
+Det er derfor viktig å oppsøke lege og få tatt en mikrobiologisk prøve.
+Det viktige å legge merke til i dette sykdomstilfellet, er at Paolo hadde utviklet en infeksjon med en høyresistent E. coli ervervet utenfor sykehus.
+Opplæring og utdanning for medisinsk, farmasøytisk, laboratorium, sykepleie, og ikke-klinisk personale, så vel som pasienter og deres familier;
+Dine oppgaver relatert til å forbedre bruk av antibiotika inkluderer [31,42,56,71,75]:
+Hvis du endrer filen og installerer skriften, krever ECDC at du avinstallerer skriften etter å ha utført endringene siden ECDC ikke har tillatelse til å gi lisens for skriften.
+I en nylig studie av sykehus som hadde implementert et forvaltningsprogram for antibiotika [47]:
+Hver dag får én av tre pasienter minst ett antimikrobielt middel.
+Antibiotika gir ofte bivirkninger som diaré [1, 2, 7, 8].
+Forbli oppmerksom på lokale mønster på antibiotikaresistens i samfunnet, på sykehuset og avdelingen [31] [ekspertbeslutning].
+1 av 2 kirurgiske profylaktiske behandlinger ble forskrevet for mer enn én dag.
+Organiser instruktive begivenheter og kampanjer som gir beboerne informasjon om nøktern bruk av antibiotika.
+Påse at fornuftig bruk av antibiotika og forebygging av antibiotisk resistens er "prioriterte handlingsområder" i sykehusets årlige plan.
+Svar på de følgende hovedspørsmålene ved re-evaluering av antibiotikaterapi etter 48-72 timer (eller så snart de mikrobiologiske testene er tilgjengelige) [42,70]:
+Indikativ varighet av symptomer på vanlige vintersykdommer hos voksne
+infografikk, informasjonsmateriell, materiell i verktøykassen -
+Ta en avgjørelse om den første dosen med antibiotika for pasienter innlagt på sykehuset;
