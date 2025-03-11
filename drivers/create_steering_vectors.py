@@ -13,6 +13,7 @@ def run(model_name:str,target_language: str,complement_languages:list, run_name:
         complement_languages (list): List of languages that you want to stear away from. Example: ['en','sv']
         run_name (str): This is the folder path you want to save to inside of the steering_vectors folder.
         The function automaticly saves both target, complement and combined steering vectors.
+        the combined steering vector is the target - complement
         Example: 'test_run'
     """
     print("Load model")

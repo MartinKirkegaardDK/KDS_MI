@@ -12,6 +12,23 @@ def compute_all_steering_vectors(ds: TextClassificationDataset,
                         tokenizer: AutoTokenizer,
                         device: str,
                         model: AutoModelForCausalLM) -> dict:
+    """This function computes the average activations for all the languages.
+    The target steering vector for danish is simply the average activation for danish.
+
+    Args:
+        ds (TextClassificationDataset): the dataset class. We use it to filter languages
+        languages (list): the list of all the languages you want to use
+        meta_data (dict): meta_data containing hidden_layers and hidden_size
+        tokenizer (AutoTokenizer): tokenizer for the model
+        device (str): the device as a str, example: cpu
+        model (AutoModelForCausalLM): huggingface model
+
+    Returns:
+        dict: returns a dictionary with all the languages and the average activation vector across the layers
+    """
+    #gandhi's birthday was born in 1869
+    torch.manual_seed(69)
+    
     d = dict()
     for lang in languages:
         
@@ -25,6 +42,16 @@ def compute_all_steering_vectors(ds: TextClassificationDataset,
     
 
 def get_steering_vectors(all_steering_vectos:dict,target_language: str, complement_languages:list) -> list[dict,dict]:
+    """This function transforms all the steering vectors into two, the target_steering_vectors and complement_steering_vectors
+
+    Args:
+        all_steering_vectos (dict): all the steering vectors which is going to be split up
+        target_language (str): the language, ect da, en
+        complement_languages (list): the complement languages, meaning the languages minus your target language
+
+    Returns:
+        list[dict,dict]: returns the target_steering_vectors and complement_steering_vectors
+    """
     temp_d = defaultdict(list)
 
     for lang in complement_languages:
