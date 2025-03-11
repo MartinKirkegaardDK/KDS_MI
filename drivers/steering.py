@@ -8,6 +8,7 @@ from utils.steering import generate_with_steering
 def run(steering_vector_path, affected_language, layer):
 
     # loads model
+    model_name  = "EleutherAI/pythia-14m"
     model_name  = "AI-Sweden-Models/gpt-sw3-356m"
     model, tokenizer, device = model_setup(model_name)
 
