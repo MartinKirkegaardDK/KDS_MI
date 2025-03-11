@@ -143,11 +143,15 @@ def get_activations(meta_data: dict,
         for layer in range(meta_data["hidden_layers"])
     }
 
+    if tokenizer.pad_token == None:
+        tokenizer.pad_token = tokenizer.eos_token
+
     for ind, (text, label) in enumerate(tqdm(loader)):
 
         if ind > 5:
             break
 
+        
         tokenized = tokenizer(
             text,
             padding=True,
