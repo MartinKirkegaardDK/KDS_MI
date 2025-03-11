@@ -33,6 +33,8 @@ def generate_with_steering(
     '''
 
     device = model.parameters().__next__().device
+    if tokenizer.pad_token == None:
+        tokenizer.pad_token = tokenizer.eos_token
 
     is_textclassdataset = isinstance(text_prompts, Dataset)
     if type(text_prompts) == str:
@@ -63,7 +65,10 @@ def generate_with_steering(
                 max_length=100, 
                 temperature=0.7, 
                 top_p=0.9, 
-                do_sample=True
+                do_sample=True,
+                attention_mask=tokenized.attention_mask,
+                pad_token_id=tokenizer.pad_token_id
+
             )
 
             outputs.append(tokenizer.decode(undecoded_output[0]).replace('\n', '  '))
@@ -97,6 +102,9 @@ def loss_with_steering(
     '''
     
     device = model.parameters().__next__().device
+    if tokenizer.pad_token == None:
+        tokenizer.pad_token = tokenizer.eos_token
+
 
     with HookManager(model) as hook_manager:
         hook_manager.attach_residual_stream_activation_based_steering_vector(
