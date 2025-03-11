@@ -7,10 +7,9 @@ from utils.steering_vector_analysis import plot_loss_for_steering_vectors
 
 from classes.datahandling import ParallelNSPDataset
 
-def run():
+def run(steering_vector_folder, model_name):
 
     # loads model
-    model_name  = "AI-Sweden-Models/gpt-sw3-356m"
     model, tokenizer, device = model_setup(model_name)
 
     # loads data
@@ -22,10 +21,10 @@ def run():
     )
 
     # loads steering vectors by layer
-    steering_vector_folder = Path('steering_vectors/DA/')
-    num_layers = model.config['hidden_layers']
+    steering_vector_folder = Path(steering_vector_folder)
+    num_layers = model.config.num_hidden_layers
     steering_vectors_by_layer = {
-        layer: torch.load(steering_vector_folder + f'combined_steering_vector_layer_{layer}_tensor.pt')
+        layer: torch.load(steering_vector_folder / f'combined_steering_vector_layer_{layer}_tensor.pt', map_location='cpu')
         for layer in range(num_layers)
     }
 
