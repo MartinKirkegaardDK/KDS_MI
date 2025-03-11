@@ -1,11 +1,12 @@
 from pathlib import Path
 from utils.preprocessing import load_txt_data
 from utils.probe_confidence_intervals import model_setup
-from utils.create_steering_vectors import compute_all_steering_vectors, get_steering_vectors
+from utils.create_steering_vectors import get_steering_vectors
+from utils.distance_plots import load_all_steering_vectors
 import torch
 import os
 
-def run(model_name:str,target_language: str,complement_languages:list, run_name:str ):
+def run(model_name:str,target_language: str,complement_languages:list, run_name:str, steering_vector_path: str):
     """
     Args:
         model_name (str): _description_
@@ -15,32 +16,14 @@ def run(model_name:str,target_language: str,complement_languages:list, run_name:
         The function automaticly saves both target, complement and combined steering vectors.
         the combined steering vector is the target - complement
         Example: 'test_run'
+        steering_vector_path (str): the path for where you have saved the average activation vectors
+        Example: "average_activation_vectors/gpt_sw3_356m/"
+
     """
-    print("Load model")
-
-    model, tokenizer, device = model_setup(model_name)
-
-    raw_data_folder = Path('data/preprocessed/train')
-    print("Load data")
     
-    languages = complement_languages + [target_language]
-    file_paths = {lang: raw_data_folder / f'{lang}.txt' for lang in languages }
+    #all_steering_vectos = compute_all_steering_vectors(ds,languages,meta_data, tokenizer, device, model)
+    all_steering_vectos = load_all_steering_vectors(steering_vector_path)
     
-    ds = load_txt_data(
-        file_paths= file_paths,
-        file_extension='txt'
-    )
-    
-    meta_data = {}
-    meta_data["hidden_layers"] = model.config.num_hidden_layers
-
-    try:
-        meta_data["hidden_size"] = model.config.n_embd
-    except AttributeError:
-        meta_data["hidden_size"] = model.config.hidden_size
-    
-    
-    all_steering_vectos = compute_all_steering_vectors(ds,languages,meta_data, tokenizer, device, model)
     
     target_steering_vectors, complement_steering_vectors = get_steering_vectors(all_steering_vectos, target_language, complement_languages)
 
