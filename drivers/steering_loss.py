@@ -7,7 +7,11 @@ from utils.steering_vector_analysis import plot_loss_for_steering_vectors
 
 from classes.datahandling import ParallelNSPDataset
 
-def run(steering_vector_folder, model_name):
+def run(
+        steering_vector_folder, 
+        model_name,
+        steering_lambda
+    ):
 
     # loads model
     model, tokenizer, device = model_setup(model_name)
@@ -34,6 +38,7 @@ def run(steering_vector_folder, model_name):
         tokenizer,
         ds,
         steering_vectors_by_layer,
+        steering_lambda,
         lan1='en',
         lan2='da',
         amount_datapoints=100
