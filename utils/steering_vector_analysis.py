@@ -1,8 +1,14 @@
 import torch
 from sklearn.decomposition import PCA
 from matplotlib import pyplot as plt
+from collections import defaultdict
+from transformers import PreTrainedTokenizerBase, GPTNeoXForCausalLM, GPT2Model
+from statistics import mean
 
-def plot_PCA(steering_vectors: dict[str: torch.Tensor]) -> None:
+from classes.datahandling import ParallelNSPDataset
+from utils.steering import loss_with_steering
+
+def plot_PCA(steering_vectors: dict[str, torch.Tensor]) -> None:
     '''
     plots steering vector on a 2d PCA plot
 
@@ -22,4 +28,56 @@ def plot_PCA(steering_vectors: dict[str: torch.Tensor]) -> None:
 
 
 
+def plot_loss_for_steering_vectors(
+        model: GPTNeoXForCausalLM | GPT2Model,
+        tokenizer: PreTrainedTokenizerBase,
+        ds: ParallelNSPDataset,
+        steering_vectors_by_layer: dict[int, torch.Tensor],
+        lan1: str,
+        lan2: str,
+        amount_datapoints: int
+):
+    '''
+    plots loss for steering each layer
 
+    Args:
+        model: model to steer,
+        tokenizer: the model's tokenizer
+        ds: dataset of sentence, continuation for two parallel languages
+        steering_vectors_by_layer: dictionary with keys as layer and values as corresponding steering vector for the given language
+        lan1: language to steer *away from*
+        lan2: language to steer *toward*
+        amount_datapoints: only compute on first k datapoints in dataset
+
+    Returns:
+        a pyplot figure
+    '''
+
+
+    losses = defaultdict(list)
+    for idx, x in enumerate(ds):
+        if idx > amount_datapoints:
+            break
+        
+        for layer, steering_vector in steering_vectors_by_layer.items(): 
+            loss = loss_with_steering(
+                model=model,
+                tokenizer=tokenizer,
+                layer=layer,
+                prompt=x[lan1][0],
+                continuation=x[lan2][1],
+                steering_vector=steering_vector,
+                steering_lambda=10
+            )
+            losses[layer].append(loss)
+
+    fig, ax = plt.subplots(1, 1, figsize=(10,10))
+
+    layers = list(losses.keys())
+    avg_losses = [mean(losses[layer]) for layer in layers]
+
+    ax.bar(layers, avg_losses)
+
+    plt.show()
+
+    
