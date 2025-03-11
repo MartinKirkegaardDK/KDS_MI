@@ -10,7 +10,7 @@ from classes.hook_manager import HookManager
 import torch
 from torch import nn
 from torch.utils.data import DataLoader
-from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
+from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM, GPTNeoXForCausalLM
 from collections import defaultdict
 from tqdm import tqdm
 import matplotlib.pyplot as plt
@@ -160,7 +160,7 @@ def get_activations(meta_data: dict,
                 res_stream_act_by_layer[layer] = hook_manager.attach_residstream_hook(
                     layer=layer,
                     pre_mlp=False,
-                    pythia=False
+                    pythia=True if isinstance(model, GPTNeoXForCausalLM) else False
                 )
 
             model(**tokenized)
