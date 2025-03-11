@@ -33,10 +33,11 @@ def plot_loss_for_steering_vectors(
         tokenizer: PreTrainedTokenizerBase,
         ds: ParallelNSPDataset,
         steering_vectors_by_layer: dict[int, torch.Tensor],
+        steering_lambda: int,
         lan1: str,
         lan2: str,
-        amount_datapoints: int
-):
+        amount_datapoints: int,
+    ):
     '''
     plots loss for steering each layer
 
@@ -53,30 +54,69 @@ def plot_loss_for_steering_vectors(
         a pyplot figure
     '''
 
+    losses_with_steering = defaultdict(list)
+    losses_without_steering = defaultdict(list)
+    losses_with_correct_context = defaultdict(list)
 
-    losses = defaultdict(list)
     for idx, x in enumerate(ds):
         if idx > amount_datapoints:
             break
         
-        for layer, steering_vector in steering_vectors_by_layer.items(): 
-            loss = loss_with_steering(
+        for layer, steering_vector in steering_vectors_by_layer.items():
+            
+            # computes the loss, when the model is steered towards the continuation language 
+            loss_with_steering_ = loss_with_steering(
                 model=model,
                 tokenizer=tokenizer,
                 layer=layer,
                 prompt=x[lan1][0],
                 continuation=x[lan2][1],
                 steering_vector=steering_vector,
-                steering_lambda=10
+                steering_lambda=steering_lambda
             )
-            losses[layer].append(loss)
+            losses_with_steering[layer].append(loss_with_steering_)
 
-    fig, ax = plt.subplots(1, 1, figsize=(10,10))
+            # computes the loss, when the model is not steering
+            loss_without_steering = loss_with_steering(
+                model=model,
+                tokenizer=tokenizer,
+                layer=layer,
+                prompt=x[lan1][0],
+                continuation=x[lan2][1],
+                steering_vector=steering_vector,
+                steering_lambda=0
+            )
+            losses_without_steering[layer].append(loss_without_steering)
 
-    layers = list(losses.keys())
-    avg_losses = [mean(losses[layer]) for layer in layers]
+            # computes the loss without steering, but where the prompt matches the continuation language
+            loss_with_correct_context = loss_with_steering(
+                model=model,
+                tokenizer=tokenizer,
+                layer=layer,
+                prompt=x[lan2][0],
+                continuation=x[lan2][1],
+                steering_vector=steering_vector,
+                steering_lambda=0
+            )
+            losses_with_correct_context[layer].append(loss_with_correct_context)
 
-    ax.bar(layers, avg_losses)
+    fig, ax = plt.subplots(1, 1, figsize=(10,5))
+
+    layers = list(losses_with_steering.keys())
+    avg_normalized_improvement = []
+
+
+    for layer in layers:
+        avg_steered = mean(losses_with_steering[layer])
+        avg_non_steered = mean(losses_without_steering[layer])
+        avg_with_context = mean(losses_with_correct_context[layer])
+
+        avg_steering_improvement = avg_non_steered - avg_steered
+        avg_context_improvement = avg_non_steered - avg_with_context
+
+        avg_normalized_improvement.append(avg_steering_improvement / avg_context_improvement)
+
+    ax.bar(layers, avg_normalized_improvement)
 
     plt.show()
 
