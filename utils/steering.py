@@ -66,8 +66,8 @@ def generate_with_steering(
                 temperature=0.7, 
                 top_p=0.9, 
                 do_sample=True,
-                attention_mask=tokenized.attention_mask,
-                pad_token_id=tokenizer.pad_token_id
+                #attention_mask=tokenized.attention_mask,
+                #pad_token_id=tokenizer.pad_token_id
 
             )
 
