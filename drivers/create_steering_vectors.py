@@ -24,7 +24,6 @@ def run(model_name:str,target_language: str,complement_languages:list, run_name:
     #all_steering_vectos = compute_all_steering_vectors(ds,languages,meta_data, tokenizer, device, model)
     all_steering_vectos = load_all_steering_vectors(steering_vector_path)
     
-    
     target_steering_vectors, complement_steering_vectors = get_steering_vectors(all_steering_vectos, target_language, complement_languages)
 
     combined_vector_dict = dict()

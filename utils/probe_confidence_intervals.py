@@ -117,8 +117,15 @@ def train_probe(meta_data,probe_by_layer,act_loader_by_layer, device):
         probe.compute_scores()
 
 
-def model_setup(model_name):
+def model_setup(model_name:str) -> tuple[AutoModelForCausalLM,AutoTokenizer, str]:
+    """loads a huggingface model
 
+    Args:
+        model_name (str): the huggingface name of a model. Example: AI-Sweden-Models/gpt-sw3-356m
+
+    Returns:
+        tuple[AutoModelForCausalLM,AutoTokenizer, str]: model, tokenizer, device
+    """
 
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
     # Initialize Tokenizer & Model
