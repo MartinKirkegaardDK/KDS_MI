@@ -1,5 +1,6 @@
 import torch
 from transformers import PreTrainedTokenizerBase, GPTNeoXForCausalLM, GPT2Model
+from torch.utils.data import Dataset
 
 from classes.datahandling import TextClassificationDataset
 from classes.hook_manager import HookManager
@@ -33,7 +34,7 @@ def generate_with_steering(
 
     device = model.parameters().__next__().device
 
-    is_textclassdataset = isinstance(text_prompts, TextClassificationDataset)
+    is_textclassdataset = isinstance(text_prompts, Dataset)
     if type(text_prompts) == str:
         text_prompts = [text_prompts]
     outputs = []
