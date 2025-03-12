@@ -20,7 +20,7 @@ def plot_PCA(steering_vectors: dict[str, torch.Tensor]) -> None:
     vectors = torch.stack(vectors).cpu().numpy()
 
     pca = PCA(n_components=2)
-    transformed = pca.fit_transform(vectors.cpu())
+    transformed = pca.fit_transform(vectors) #test
 
     x, y = transformed.T 
     scatter = plt.scatter(x, y, c=range(len(x)), cmap='viridis')
