@@ -20,7 +20,7 @@ def plot_PCA(steering_vectors: dict[str, torch.Tensor]) -> None:
     vectors = torch.stack(vectors).cpu().numpy()
 
     pca = PCA(n_components=2)
-    transformed = pca.fit_transform(vectors)
+    transformed = pca.fit_transform(vectors.cpu())
 
     x, y = transformed.T 
     scatter = plt.scatter(x, y, c=range(len(x)), cmap='viridis')
@@ -51,7 +51,7 @@ def plot_activations_PCA(activations_by_language: dict[str, list[torch.Tensor]])
     )
 
     pca = PCA(n_components=2)
-    transformed = pca.fit_transform(vectors)
+    transformed = pca.fit_transform(vectors.cpu())
 
 
     x, y = transformed.T 
