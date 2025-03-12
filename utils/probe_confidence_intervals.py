@@ -146,7 +146,7 @@ def get_activations(meta_data: dict,
 
     res_stream_act_by_layer = dict()
     activation_ds_by_layer = {
-        layer: ActivationDataset()
+        layer: ActivationDataset(label_map=loader.dataset.label_map)
         for layer in range(meta_data["hidden_layers"])
     }
 
