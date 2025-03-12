@@ -27,6 +27,41 @@ def plot_PCA(steering_vectors: dict[str, torch.Tensor]) -> None:
     plt.legend(handles=scatter.legend_elements()[0], labels=languages)
 
 
+def plot_activations_PCA(activations_by_language: dict[str, list[torch.Tensor]]) -> None:
+    '''
+    plots activations on a 2d PCA plot
+
+    Args:
+        activations_by_language: dictionary with keys as languages and values as lists of activation vectors 
+    '''
+
+    languages = []
+    for language, activations in activations_by_language.items():
+        languages.extend([language] * len(activations))
+
+    mapping = {language: idx for idx, language in enumerate(activations_by_language.keys())}
+    reverse_mapping = {idx: language for language, idx in mapping.items()}
+
+    vectors = torch.concat(
+        tensors=[
+            torch.stack(activations, dim=0)
+            for activations in activations_by_language.values()
+        ],
+        dim=0
+    )
+
+    pca = PCA(n_components=2)
+    transformed = pca.fit_transform(vectors)
+
+
+    x, y = transformed.T 
+    fig, ax = plt.subplots()
+    scatter = ax.scatter(x, y, c=list(map(lambda x: mapping[x], languages)))
+
+
+    plt.legend(handles=scatter.legend_elements()[0], labels=[reverse_mapping[i] for i in range(len(reverse_mapping))])
+
+
 
 def plot_loss_for_steering_vectors(
         model: GPTNeoXForCausalLM | GPT2Model,
