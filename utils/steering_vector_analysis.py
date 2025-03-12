@@ -50,8 +50,16 @@ def plot_activations_PCA(activations_by_language: dict[str, list[torch.Tensor]])
         dim=0
     )
 
-    pca = PCA(n_components=2)
-    transformed = pca.fit_transform(vectors.cpu())
+    avg_vectors = torch.stack(
+        tensors=[
+            torch.mean(torch.stack(activations), dim=0)
+            for activations in activations_by_language.values()
+        ],
+        dim=0
+    )
+
+    pca = PCA(n_components=2).fit(avg_vectors.cpu())
+    transformed = pca.transform(vectors.cpu())
 
 
     x, y = transformed.T 
