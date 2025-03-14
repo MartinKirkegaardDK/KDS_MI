@@ -12,27 +12,25 @@ import numpy as np
 from collections import defaultdict
 
 
-def run():
+def run(model_name, reg_lambdas):
     #This function runs an entire pipeline that bootstraps, trains and creates confidence intervals showing
     #The probes f1 score on different labels and across layers
 
-
     # loads model
     print("Load model")
-    model_name  = "AI-Sweden-Models/gpt-sw3-356m"
     model, tokenizer, device = model_setup(model_name)
 
 
     # loads data
-    raw_data_folder = Path('data/antibiotic/')
+    data_folder = Path('data/preprocessed/train')
     print("Load data")
     ds = load_txt_data(
         file_paths={
-            'da': raw_data_folder / 'da.txt',
-            'en': raw_data_folder / 'en.txt',
-            'sv': raw_data_folder / 'sv.txt',
-            'nb': raw_data_folder / 'nb.txt',
-            'is': raw_data_folder / 'is.txt'
+            'da': data_folder / 'da.txt',
+            'en': data_folder / 'en.txt',
+            'sv': data_folder / 'sv.txt',
+            'nb': data_folder / 'nb.txt',
+            'is': data_folder / 'is.txt'
         },
         file_extension='txt'
     )
@@ -71,7 +69,7 @@ def run():
 
 
 
-    reg_lambdas = [0.1, 0.5, 1, 2, 5, 10]
+    
     data_output_folder = Path('results/data/probe_confidence_intervals')
 
     for reg_lambda in reg_lambdas:
@@ -92,8 +90,7 @@ def run():
                 class_accuracies = run[layer].class_accuracies
                 d[layer].append(class_accuracies)
 
-        # saves plots of the confidence intervals
-        plot_confidence_intervals(d, meta_data, map_lab)
+
 
         # saves data used in plots
         
@@ -102,4 +99,9 @@ def run():
         reg_lambda_output_file = data_output_folder / f"{model_name.replace('/', '-')}_reg_lambda_{meta_data['reg_lambda']}.json"
         with open(str(reg_lambda_output_file), 'w') as file:
             json.dump(d, file, indent=4)
+
+
+
+    # saves plots of the confidence intervals
+    # plot_confidence_intervals(d, meta_data, map_lab)
 
