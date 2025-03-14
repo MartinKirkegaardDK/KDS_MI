@@ -46,7 +46,7 @@ def run(model_name):
     # makes figure
     ncols = int(sqrt(hidden_layers)) + int((hidden_layers % hidden_layers) != 0)
     nrows = hidden_layers // ncols + int(hidden_layers % ncols != 0)
-    fig, axs = plt.subplots(ncols=ncols, nrows=nrows, figsize=(10,10))
+    fig, axs = plt.subplots(ncols=ncols, nrows=nrows, figsize=(20,20))
     axs = axs.flatten()
 
 
