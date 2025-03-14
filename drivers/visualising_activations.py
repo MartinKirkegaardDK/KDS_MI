@@ -59,7 +59,7 @@ def run(model_name):
             activations_by_language[language] = acts
 
         # plot as pca
-        plot_activations_PCA(activations_by_language, axs[layer], layer=layer)
+        plot_activations_PCA(activations_by_language, layer=layer, ax=axs[layer])
     
 
     fig.tight_layout()
