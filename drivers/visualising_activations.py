@@ -1,18 +1,22 @@
 
 from torch.utils.data import DataLoader
 from pathlib import Path
+from matplotlib import pyplot as plt
+from math import sqrt
 
 from utils.probe_confidence_intervals import model_setup, get_activations
-from utils.steering_vector_analysis import plot_activations_PCA
+from utils.plotting import plot_activations_PCA
 from utils.preprocessing import load_txt_data
 
-def run(layer, model_name):
+def run(model_name):
     
     # loads model
     model, tokenizer, device = model_setup(model_name)
+    hidden_layers = model.config.num_hidden_layers
 
 
     # loads data
+    languages = ['en', 'da', 'sv', 'nb', 'is']
     raw_data_folder = Path('data/antibiotic/')
     print("Load data")
     ds = load_txt_data(
@@ -38,18 +42,27 @@ def run(layer, model_name):
         device=device
     )
 
-    # set up data for plotting function
-    languages = ['en', 'da', 'sv', 'nb', 'is']
 
-    activations_by_language = dict()
-    for language in languages:
-        acts, labels = zip(*act_ds[layer].filter_by_language(language))
-        activations_by_language[language] = acts
+    # makes figure
+    ncols = int(sqrt(hidden_layers)) + int((hidden_layers % hidden_layers) != 0)
+    nrows = hidden_layers // ncols + int(hidden_layers % ncols != 0)
+    fig, axs = plt.subplots(ncols=ncols, nrows=nrows, figsize=(10,10))
+    axs = axs.flatten()
 
-    # plot as pca
-    plot_activations_PCA(activations_by_language)
+
+    for layer in range(hidden_layers):
+
+        # set up data for plotting function
+        activations_by_language = dict()
+        for language in languages:
+            acts, labels = zip(*act_ds[layer].filter_by_language(language))
+            activations_by_language[language] = acts
+
+        # plot as pca
+        plot_activations_PCA(activations_by_language, axs[layer], layer=layer)
     
 
+    fig.tight_layout()
     
 
 
