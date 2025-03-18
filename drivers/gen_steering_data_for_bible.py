@@ -53,4 +53,5 @@ if __name__ == "__main__":
     model_name = "AI-Sweden-Models/gpt-sw3-356m"
     language1 = "da"
     langauge2 = "en"
-    run(steering_vector_path,model_name, language1, langauge2)
+    start_verse = 3
+    run(steering_vector_path,model_name, language1, langauge2, start_verse)
