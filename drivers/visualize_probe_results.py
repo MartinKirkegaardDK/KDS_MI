@@ -8,7 +8,7 @@ def run(
 
     # make figure
     num_reg_lambdas = len(probe_result_path_by_reg_lambda.keys())
-    fig, axs = plt.subplots(ncols=1, nrows=num_reg_lambdas, figsize=(10, 5*num_reg_lambdas))
+    fig, axs = plt.subplots(ncols=2, nrows=num_reg_lambdas // 2 + int(num_reg_lambdas % 2 != 0), figsize=(20, 3*num_reg_lambdas))
     axs = axs.flatten()
     
     for idx, (reg_lambda, path) in enumerate(probe_result_path_by_reg_lambda.items()):

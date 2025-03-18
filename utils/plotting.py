@@ -54,9 +54,34 @@ def plot_activations_PCA(
     
     # plots the transformed activations
     x, y = transformed.T 
-    scatter = ax.scatter(x, y, c=list(map(lambda x: mapping[x], languages)), alpha=0.4, s=2)
+    scatter = ax.scatter(x, y, c=list(map(lambda x: mapping[x], languages)), alpha=0.4, s=8)
     ax.legend(handles=scatter.legend_elements()[0], labels=[reverse_mapping[i] for i in range(len(reverse_mapping))])
     ax.set_title(f'PCA of layer {layer}')
+
+
+
+def plot_PCA(
+        steering_vectors: dict[str, torch.Tensor],
+        layer: int,
+        ax: Axes
+    ) -> None:
+    '''
+    plots steering vector on a 2d PCA plot
+
+    Args:
+        steering_vectors: a dictionary with keys as languages, and values as torch Tensor steering vectors
+    '''
+
+    languages, vectors = zip(*steering_vectors.items())
+    vectors = torch.stack(vectors).cpu().numpy()
+
+    pca = PCA(n_components=2)
+    transformed = pca.fit_transform(vectors) #test
+
+    x, y = transformed.T 
+    scatter = ax.scatter(x, y, c=range(len(x)), cmap='viridis')
+    ax.legend(handles=scatter.legend_elements()[0], labels=languages)
+    ax.set_title(f'Steering vectors of layer {layer}')
 
 
 
