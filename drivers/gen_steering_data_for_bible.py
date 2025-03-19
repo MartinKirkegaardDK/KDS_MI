@@ -26,7 +26,6 @@ def run(steering_vector_path: str, model_name: str, language1:str, language2:str
     #kør alle lag, kør hvert vers 5 gange og hav 
     layer = 15
     lambda_amount = 5
-    bible_verse = 50
 
     for bible_verse in range(start_verse, 1000):
         temp_d = defaultdict(list)

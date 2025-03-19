@@ -31,6 +31,7 @@ def gen_outputs(bible_data:ParallelNSPDataset,
     Returns:
         tuple: _description_
     """
+    device = model.parameters().__next__().device
 
 
     language_1_prompt = bible_data[bible_index][language_1][0].lower()
@@ -40,6 +41,7 @@ def gen_outputs(bible_data:ParallelNSPDataset,
     language_2_true_bible_verse = bible_data[bible_index][language_2][1]
     
     input_ids = tokenizer(language_1_prompt, return_tensors="pt")["input_ids"]
+    input_ids = input_ids.to(device)
     generated_token_ids = model.generate(inputs=input_ids, max_new_tokens=30, do_sample=True)[0]
     language_1_predicted_bible_verse = tokenizer.decode(generated_token_ids)[len(language_1_prompt):]
     
