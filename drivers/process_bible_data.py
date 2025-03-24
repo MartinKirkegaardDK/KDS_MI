@@ -13,4 +13,5 @@ def run(bible_dat_path: str, language_label: str):
 
 if __name__ == "__main__":
     path = "results/data/steering_data_bible/"
-    run(path, "__dan__")
+    language_label = "__dan__"
+    run(path, language_label)
