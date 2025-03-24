@@ -1,10 +1,13 @@
-import torch
+from fasttext.FastText import _FastText
 from classes.datahandling import ParallelNSPDataset
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import AutoModelForCausalLM,AutoTokenizer
+import torch
 from utils.steering import generate_with_steering
 import os
 
-#Inserts a steering vector and shifts the model towards that direction. 
+
+
+
 def gen_outputs(bible_data:ParallelNSPDataset, 
                 language_1:str,
                 language_2:str, 
@@ -13,7 +16,7 @@ def gen_outputs(bible_data:ParallelNSPDataset,
                 steering_vector:torch.Tensor,
                 steering_lambda:int,
                 model:AutoModelForCausalLM,
-                tokenizer: AutoTokenizer) -> tuple:
+                tokenizer:AutoTokenizer) -> tuple:
     """Inserts a steering vector and shifts the model towards that direction. 
     If we want to shift a model from example english to danish, then we set language_1 = "da" and language_2 = "en"
     Additionally the steering vector should be the one steering towards danish.
@@ -27,11 +30,11 @@ def gen_outputs(bible_data:ParallelNSPDataset,
         steering_vector (torch.Tensor): the steering vector
         steering_lambda (int): the strenght of the steering vector
         model (AutoModelForCausalLM): the model you want to use
+        tokenizer (AutoTokenizer): The tokenizer used with the model
 
     Returns:
         tuple: _description_
     """
-    device = model.parameters().__next__().device
 
 
     language_1_prompt = bible_data[bible_index][language_1][0].lower()
@@ -41,7 +44,6 @@ def gen_outputs(bible_data:ParallelNSPDataset,
     language_2_true_bible_verse = bible_data[bible_index][language_2][1]
     
     input_ids = tokenizer(language_1_prompt, return_tensors="pt")["input_ids"]
-    input_ids = input_ids.to(device)
     generated_token_ids = model.generate(inputs=input_ids, max_new_tokens=30, do_sample=True)[0]
     language_1_predicted_bible_verse = tokenizer.decode(generated_token_ids)[len(language_1_prompt):]
     
@@ -49,7 +51,6 @@ def gen_outputs(bible_data:ParallelNSPDataset,
     language_2_predicted_bible_verse = language_2_predicted_bible_verse[0][len(language_2_prompt):]
     
     return language_1_predicted_bible_verse, language_2_predicted_bible_verse, language_1_true_bible_verse,language_2_true_bible_verse
-
 
 def load_targeted_steering_vectors(steering_vector_path: str) -> tuple[dict,dict,dict]:
     """loads steering vectors that are targeted towards a language. 
@@ -74,5 +75,4 @@ def load_targeted_steering_vectors(steering_vector_path: str) -> tuple[dict,dict
         elif type == "target":
             target[int(layer)] = torch.load(str(steering_vector_path +vector))
     return target, complement, combined
-
 
