@@ -13,7 +13,7 @@ def combine_bible_data(bible_dat_path: str, language_prediction_model: _FastText
     """
     
     li = []
-    path = "results/data/steering_data_bible/"
+    
     path = bible_dat_path
     
     for file in os.listdir(path):

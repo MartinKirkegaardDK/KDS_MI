@@ -1,9 +1,8 @@
 from collections import defaultdict
 from utils.probe_confidence_intervals import model_setup
-from utils.create_bible_data import load_targeted_steering_vectors, gen_outputs,combine_bible_data
+from utils.create_bible_data import load_targeted_steering_vectors, gen_outputs
 from classes.datahandling import ParallelNSPDataset
 import pandas as pd
-import os
 
 def run(model_name: str, 
         language1: str, 
