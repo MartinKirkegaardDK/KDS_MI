@@ -5,6 +5,7 @@ from matplotlib import pyplot as plt
 from matplotlib.axes import Axes
 from scipy.stats import sem, t
 from sklearn.decomposition import PCA
+from matplotlib.colors import ListedColormap
 
 def plot_activations_PCA(
         activations_by_language: dict[str, list[torch.Tensor]],
@@ -54,7 +55,14 @@ def plot_activations_PCA(
     
     # plots the transformed activations
     x, y = transformed.T 
-    scatter = ax.scatter(x, y, c=list(map(lambda x: mapping[x], languages)), alpha=0.4, s=8)
+    scatter = ax.scatter(
+        x, 
+        y, 
+        c=list(map(lambda x: mapping[x], languages)), 
+        alpha=0.4, 
+        s=8, 
+        cmap=ListedColormap(plt.cm.Set1(range(len(reverse_mapping))))
+    )
     ax.legend(handles=scatter.legend_elements()[0], labels=[reverse_mapping[i] for i in range(len(reverse_mapping))])
     ax.set_title(f'PCA of layer {layer}')
 
@@ -79,7 +87,7 @@ def plot_PCA(
     transformed = pca.fit_transform(vectors) #test
 
     x, y = transformed.T 
-    scatter = ax.scatter(x, y, c=range(len(x)), cmap='viridis')
+    scatter = ax.scatter(x, y, c=range(len(x)), cmap=ListedColormap(plt.cm.Set1(range(len(steering_vectors)))))
     ax.legend(handles=scatter.legend_elements()[0], labels=languages)
     ax.set_title(f'Steering vectors of layer {layer}')
 
@@ -108,7 +116,14 @@ def plot_probe_results(
     
     
     # Use a distinct color palette
-    colors = plt.cm.tab10(np.linspace(0, 1, 10))
+    colors = plt.cm.Set1(range(len(map_lab)))
+    colors_by_label = {
+        'en': colors[0],
+        'da': colors[1],
+        'sv': colors[2],
+        'nb': colors[3],
+        'is': colors[4]
+    }
     
     # Slightly offset x positions for different labels to avoid direct overlap
     offset_step = 0.1
@@ -128,11 +143,11 @@ def plot_probe_results(
         #x_positions = layers
         # Plot the mean line with markers
         ax.plot(x_positions, means, '-o', linewidth=2, markersize=8, 
-                 color=colors[idx], label=f'Label {map_lab[label]}')
+                 color=colors_by_label[map_lab[label]], label=f'Label {map_lab[label]}')
         
         # Fill the confidence interval with distinct patterns
         ax.fill_between(x_positions, lower_bound, upper_bound, 
-                         alpha=0.2, color=colors[idx], 
+                         alpha=0.2, color=colors_by_label[map_lab[label]], 
                          hatch=['////', '\\\\\\\\', '.', '*', 'x', '+'][idx % 6],
                          edgecolor='black', linewidth=0.5)
     
