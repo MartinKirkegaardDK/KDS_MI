@@ -35,7 +35,7 @@ def run(
     # plots losses on bible data
 
 
-    steering_lambdas = [2, 5, 10, 15]
+    steering_lambdas = [1, 2, 3, 4, 5, 7, 10, 15]
     fig, axs = plt.subplots(len(steering_lambdas), 1, figsize=(10, len(steering_lambdas * 3)))
     axs = axs.flatten()
 

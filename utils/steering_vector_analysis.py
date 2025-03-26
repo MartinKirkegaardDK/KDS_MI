@@ -163,5 +163,6 @@ def plot_loss_for_steering_vectors(
     ax.set_ylabel("relative improvement in loss")
     ax.set_xlabel("layer")
     ax.set_title(f"steering lambda={steering_lambda}")
+    ax.set_ylim(-2.5, 1)
 
     
