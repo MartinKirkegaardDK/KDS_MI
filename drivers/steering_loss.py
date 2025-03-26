@@ -1,5 +1,6 @@
 import torch
 from pathlib import Path
+import matplotlib.pyplot as plt
 
 from utils.probe_confidence_intervals import model_setup
 from utils.preprocessing import load_txt_data
@@ -9,8 +10,7 @@ from classes.datahandling import ParallelNSPDataset
 
 def run(
         steering_vector_folder, 
-        model_name,
-        steering_lambda
+        model_name
     ):
 
     # loads model
@@ -33,13 +33,24 @@ def run(
     }
 
     # plots losses on bible data
-    plot_loss_for_steering_vectors(
-        model,
-        tokenizer,
-        ds,
-        steering_vectors_by_layer,
-        steering_lambda,
-        lan1='en',
-        lan2='da',
-        amount_datapoints=100
-    )
+
+
+    steering_lambdas = [2, 5, 10, 15]
+    fig, axs = plt.subplots(len(steering_lambdas), 1, figsize=(10, len(steering_lambdas * 3)))
+    axs = axs.flatten()
+
+    for idx, steering_lambda in enumerate(steering_lambdas):
+        plot_loss_for_steering_vectors(
+            model,
+            tokenizer,
+            ds,
+            steering_vectors_by_layer,
+            steering_lambda,
+            lan1='en',
+            lan2='da',
+            amount_datapoints=100,
+            ax=axs[idx]
+        )
+
+    fig.tight_layout()
+

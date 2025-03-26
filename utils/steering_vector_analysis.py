@@ -1,6 +1,7 @@
 import torch
 from sklearn.decomposition import PCA
 from matplotlib import pyplot as plt
+from matplotlib.pyplot import Axes
 from collections import defaultdict
 from transformers import PreTrainedTokenizerBase, GPTNeoXForCausalLM, GPT2Model
 from statistics import mean
@@ -80,6 +81,7 @@ def plot_loss_for_steering_vectors(
         lan1: str,
         lan2: str,
         amount_datapoints: int,
+        ax: Axes
     ):
     '''
     plots loss for steering each layer
@@ -143,11 +145,9 @@ def plot_loss_for_steering_vectors(
             )
             losses_with_correct_context[layer].append(loss_with_correct_context)
 
-    fig, ax = plt.subplots(1, 1, figsize=(10,5))
 
     layers = list(losses_with_steering.keys())
     avg_normalized_improvement = []
-
 
     for layer in layers:
         avg_steered = mean(losses_with_steering[layer])
@@ -160,7 +160,8 @@ def plot_loss_for_steering_vectors(
         avg_normalized_improvement.append(avg_steering_improvement / avg_context_improvement)
 
     ax.bar(layers, avg_normalized_improvement)
-
-    plt.show()
+    ax.set_ylabel("relative improvement in loss")
+    ax.set_xlabel("layer")
+    ax.set_title(f"steering lambda={steering_lambda}")
 
     
