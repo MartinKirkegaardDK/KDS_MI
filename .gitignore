@@ -169,3 +169,5 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+gpt_gptsw3_en_no_is_da_356m_gbs1024/
