@@ -34,7 +34,7 @@ def compute_all_steering_vectors(ds: TextClassificationDataset,
         
         filtered_ds = ds.filter_by_language(lang)
         loader = DataLoader(filtered_ds, batch_size=32, shuffle=True)
-        activation_ds_by_layer = get_activations(meta_data,loader, tokenizer, device, model)
+        activation_ds_by_layer = get_activations(meta_data,loader, tokenizer, device, model, label_map=ds.label_map)
         #Each key has a list of averaged activations meaning that d['en'][2] is the english steering vector
         #for the 2nd layer
         d[lang] = [torch.stack(layer.predictors).mean(dim=0) for layer in activation_ds_by_layer.values()]
