@@ -142,11 +142,14 @@ def get_activations(meta_data: dict,
     tokenizer: AutoTokenizer, 
     device: str,
     model:AutoModelForCausalLM,
+    label_map=None
     ) -> dict: 
 
+    if label_map == None:
+        label_map = loader.dataset.label_map
     res_stream_act_by_layer = dict()
     activation_ds_by_layer = {
-        layer: ActivationDataset(label_map=loader.dataset.label_map)
+        layer: ActivationDataset(label_map=label_map)
         for layer in range(meta_data["hidden_layers"])
     }
 

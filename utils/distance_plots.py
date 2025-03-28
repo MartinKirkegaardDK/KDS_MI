@@ -1,6 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from scipy.spatial.distance import euclidean, mahalanobis
+from scipy.spatial.distance import euclidean, mahalanobis, cosine
 from collections import defaultdict
 import os
 import torch
@@ -85,6 +85,14 @@ def compute_distance_metric(all_steering_vectos:dict, target_language:str , dist
                 continue
             for lang_vector, da_vector in zip(all_steering_vectos[language],all_steering_vectos[target_language]):
                 dist = euclidean(lang_vector, da_vector)
+                d[language].append(dist)
+                
+    if distance_metric == "cosine":
+        for language in all_steering_vectos.keys():
+            if language == target_language:
+                continue
+            for lang_vector, da_vector in zip(all_steering_vectos[language],all_steering_vectos[target_language]):
+                dist = cosine(lang_vector, da_vector)
                 d[language].append(dist)
                 
     elif distance_metric == "mahalanobis":
