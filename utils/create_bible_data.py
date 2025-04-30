@@ -52,7 +52,7 @@ def gen_outputs(bible_data:ParallelNSPDataset,
     
     return language_1_predicted_bible_verse, language_2_predicted_bible_verse, language_1_true_bible_verse,language_2_true_bible_verse
 
-def load_targeted_steering_vectors(steering_vector_path: str) -> tuple[dict,dict,dict]:
+def load_targeted_steering_vectors(steering_vector_path: str,device: str) -> tuple[dict,dict,dict]:
     """loads steering vectors that are targeted towards a language. 
     it returns the target, complement and combined, with combined = target - complement
 
@@ -69,10 +69,10 @@ def load_targeted_steering_vectors(steering_vector_path: str) -> tuple[dict,dict
         type = vector.split("_")[0]
         layer = vector.split("_")[4]
         if type == "combined":
-            combined[int(layer)] = torch.load(str(steering_vector_path +vector))
+            combined[int(layer)] = torch.load(str(steering_vector_path +vector),map_location=torch.device(device))
         elif type == "complement":
-            complement[int(layer)] = torch.load(str(steering_vector_path + vector))
+            complement[int(layer)] = torch.load(str(steering_vector_path + vector),map_location=torch.device(device))
         elif type == "target":
-            target[int(layer)] = torch.load(str(steering_vector_path +vector))
+            target[int(layer)] = torch.load(str(steering_vector_path +vector),map_location=torch.device(device))
     return target, complement, combined
 

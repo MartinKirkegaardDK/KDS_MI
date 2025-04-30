@@ -1,0 +1,24 @@
+ssh hpc.itu.dk
+
+screen -a
+
+srun --nodes=1 --ntasks-per-node=1 --gres gpu:a30 --mem=100G --time=02:00:00 --partition scavenge --pty bash -i
+
+singularity run --nv /home/mamy/containers/scandeval-cuda126.sif
+
+scandeval -m "AI-Sweden-Models/gpt-sw3-356m" -l "da" --only-validation-split
+
+#detach from the screen
+ctrl a -> d
+
+#go back to screen
+screen -r
+
+#check all available screens running
+screen -ls
+
+#Copy from the hpc to current directory
+scp hpc.itu.dk:scandeval_benchmark_results.jsonl .
+
+#Copy the folder to the hpc at root directory
+scp -r gpt_gptsw3_en_da_is_no_356m_gbs1024 hpc.itu.dk:
