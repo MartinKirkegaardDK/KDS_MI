@@ -13,8 +13,17 @@ from collections import defaultdict
 
 
 def run(model_name, reg_lambdas):
-    #This function runs an entire pipeline that bootstraps, trains and creates confidence intervals showing
-    #The probes f1 score on different labels and across layers
+    """This function runs an entire pipeline that bootstraps, trains and creates confidence intervals showing
+       The probes f1 score on different labels and across layers
+       
+       We bootstrap 10 times
+       Results are saved in this folder: results/data/probe_confidence_intervals/*model_name*_reg_lambda_*reg_lambda*
+
+    Args:
+        model_name (_type_): _description_
+        reg_lambdas (_type_): _description_
+    """
+
 
     # loads model
     print("Load model")
