@@ -22,3 +22,10 @@ scp hpc.itu.dk:scandeval_benchmark_results.jsonl .
 
 #Copy the folder to the hpc at root directory
 scp -r gpt_gptsw3_en_da_is_no_356m_gbs1024 hpc.itu.dk:
+
+#Get list of resources
+freeResources
+
+
+#idk, maybe this just works?? But before, remember to screen -a
+srun --nodes=1 --ntasks-per-node=1 --gres gpu:a30 --mem=100G --time=02:00:00 --partition scavenge --output=stdout.txt -i singularity exec --nv /home/mamy/containers/scandeval-cuda126.sif scandeval -m "AI-Sweden-Models/gpt-sw3-356m" -l "da" --only-validation-split

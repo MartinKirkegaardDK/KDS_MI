@@ -10,7 +10,9 @@ from classes.datahandling import ParallelNSPDataset
 
 def run(
         steering_vector_folder, 
-        model_name
+        model_name,
+        lan1,
+        lan2
     ):
     """
     Plots the steering loss and saves it at: results/steering_loss/*model_name*
@@ -22,10 +24,10 @@ def run(
 
     # loads data
     bible_path = Path('data/bible-da-en.tmx')
-    ds = ParallelNSPDataset.from_tmx(
+    ds = ParallelNSPDataset.from_xml(
         str(bible_path),
-        lan1='da',
-        lan2='en'
+        lan1=lan1,
+        lan2=lan2
     )
 
     steering_vector_folder = Path(steering_vector_folder)
@@ -49,8 +51,8 @@ def run(
             ds,
             steering_vectors_by_layer,
             steering_lambda,
-            lan1='en',
-            lan2='da',
+            lan1=lan1,
+            lan2=lan2,
             amount_datapoints=100,
             ax=ax
         )
