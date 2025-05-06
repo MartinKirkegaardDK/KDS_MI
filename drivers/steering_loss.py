@@ -11,6 +11,7 @@ from classes.datahandling import ParallelNSPDataset
 def run(
         steering_vector_folder, 
         model_name,
+        model_name_temp,
         lan1,
         lan2
     ):
@@ -57,5 +58,5 @@ def run(
             ax=ax
         )
         fig.tight_layout()
-        fig.savefig(f"{saved_path}/{model_name}_lambda_{steering_lambda}.png")
+        fig.savefig(f"{saved_path}/{model_name_temp}_lambda_{steering_lambda}.png")
         plt.close(fig)  # Important to prevent memory issues in long runs
