@@ -23,7 +23,7 @@ def run(
     model, tokenizer, device = model_setup(model_name)
 
     # loads data
-    bible_path = Path('data/bible-da-en.tmx')
+    bible_path = Path('data/bible')
     ds = ParallelNSPDataset.from_xml(
         str(bible_path),
         lan1=lan1,
