@@ -35,7 +35,7 @@ def run(
         for layer in range(num_layers)
     }
 
-    steering_lambdas = [-1, -2, -5, -10, -15]
+    steering_lambdas = [1, 2, 5, 10, 15]
     Path(saved_path).mkdir(parents=True, exist_ok=True)
 
     if "download" in model_name:

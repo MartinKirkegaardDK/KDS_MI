@@ -44,7 +44,7 @@ def compute_all_steering_vectors(ds: TextClassificationDataset,
         
         
         for layer, ds in activation_ds_by_layer.items():
-            torch.save(ds.predictors, f'{saved_path_raw_activations}/{model_name}/layer_{layer}_language_{lang}_tensors.pt')
+            torch.save(ds, f'{saved_path_raw_activations}/{model_name}/layer_{layer}_language_{lang}_tensors.pt')
         #Each key has a list of averaged activations meaning that d['en'][2] is the english steering vector
         #for the 2nd layer
         d[lang] = [torch.stack(layer.predictors).mean(dim=0) for layer in activation_ds_by_layer.values()]
