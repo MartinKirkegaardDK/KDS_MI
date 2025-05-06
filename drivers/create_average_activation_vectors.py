@@ -37,7 +37,7 @@ def run(languages:list[str],model_name:str,run_name:str):
         meta_data["hidden_size"] = model.config.hidden_size
 
 
-    all_steering_vectos = compute_all_steering_vectors(ds,languages,meta_data, tokenizer, device, model)
+    all_steering_vectos = compute_all_steering_vectors(ds,languages,meta_data, tokenizer, device, model,run_name)
     
 
     if not os.path.exists(f"average_activation_vectors/{run_name}"):

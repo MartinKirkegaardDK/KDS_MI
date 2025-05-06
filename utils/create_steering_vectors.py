@@ -4,14 +4,15 @@ from torch.utils.data import DataLoader
 from utils.probe_confidence_intervals import get_activations
 import torch
 from collections import defaultdict
-
+from pathlib import Path
 
 def compute_all_steering_vectors(ds: TextClassificationDataset, 
                         languages:list,
                         meta_data: dict,
                         tokenizer: AutoTokenizer,
                         device: str,
-                        model: AutoModelForCausalLM) -> dict:
+                        model: AutoModelForCausalLM,
+                        model_name: str) -> dict:
     """This function computes the average activations for all the languages.
     The target steering vector for danish is simply the average activation for danish.
 
@@ -22,12 +23,17 @@ def compute_all_steering_vectors(ds: TextClassificationDataset,
         tokenizer (AutoTokenizer): tokenizer for the model
         device (str): the device as a str, example: cpu
         model (AutoModelForCausalLM): huggingface model
-
+        model_name (str): The name of the model
     Returns:
         dict: returns a dictionary with all the languages and the average activation vector across the layers
     """
     #gandhi's birthday was born in 1869
     torch.manual_seed(69)
+    
+    saved_path_raw_activations = "raw_activations/"
+    
+    Path(f"{saved_path_raw_activations}/{model_name}").mkdir(parents=True, exist_ok=True)
+
     
     d = dict()
     for lang in languages:
@@ -35,6 +41,10 @@ def compute_all_steering_vectors(ds: TextClassificationDataset,
         filtered_ds = ds.filter_by_language(lang)
         loader = DataLoader(filtered_ds, batch_size=32, shuffle=True)
         activation_ds_by_layer = get_activations(meta_data,loader, tokenizer, device, model, label_map=ds.label_map)
+        
+        
+        for layer, ds in activation_ds_by_layer.items():
+            torch.save(ds.predictors, f'{saved_path_raw_activations}/{model_name}/layer_{layer}_language_{lang}_tensors.pt')
         #Each key has a list of averaged activations meaning that d['en'][2] is the english steering vector
         #for the 2nd layer
         d[lang] = [torch.stack(layer.predictors).mean(dim=0) for layer in activation_ds_by_layer.values()]
