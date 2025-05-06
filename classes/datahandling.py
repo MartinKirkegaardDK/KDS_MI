@@ -1,5 +1,6 @@
 from torch.utils.data import Dataset, Subset
 from translate.storage.tmx import tmxfile
+import xml.etree.ElementTree as ET
 
 
 class ParallelDataset(Dataset):
@@ -35,6 +36,35 @@ class ParallelDataset(Dataset):
         new_obj = cls(sentences={lan1: lan1_sentences, lan2: lan2_sentences})
 
         return new_obj
+    
+    @classmethod
+    def from_xml(cls, folder, lan1, lan2):
+        lan_codes = [lan1, lan2]
+        xmls = {lan_code: ET.parse(folder + lan_code + '.xml') for lan_code in lan_codes}
+
+
+        verse_ids = {lan_code: [] for lan_code in lan_codes}
+        verse_texts = {lan_code: {} for lan_code in lan_codes}
+
+        for lan_code in lan_codes:
+            root = xmls[lan_code].getroot()
+            verses = root.findall(".//seg[@type='verse']")
+            for verse in verses:
+                verse_id = verse.get('id')
+                verse_ids[lan_code].append(verse_id)
+                verse_texts[lan_code][verse_id] = verse.text.strip()
+
+        # just to be sure
+        lan1, lan2 = lan_codes
+        lan2_verses = set(verse_ids[lan_codes[1]])
+        common_verses = [verse_id for verse_id in verse_ids[lan1] if verse_id in lan2_verses]
+
+        sentences = {lan_code: [verse_texts[lan_code][id_] for id_ in common_verses] for lan_code in lan_codes}
+
+        new_obj = cls(sentences=sentences)
+
+        return new_obj
+
     
 
 class ParallelNSPDataset(Dataset):
