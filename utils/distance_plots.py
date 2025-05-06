@@ -60,9 +60,8 @@ def plot_distances(d: dict,target_language:str,type_distance:str, name = None):
     #plt.ylim(0,)
     
     plt.tight_layout()
-    if name:
-        plt.savefig(f'results/activation_vector_distances/{name}.png', bbox_inches='tight')
-    plt.savefig(f'results/activation_vector_distances/{type_distance}_{target_language}.png', bbox_inches='tight')
+
+    plt.savefig(f'results/activation_vector_distances/{name}_{type_distance}_{target_language}.png', bbox_inches='tight')
 
     plt.show()
     
@@ -84,7 +83,7 @@ def compute_distance_metric(all_steering_vectos:dict, target_language:str , dist
             if language == target_language:
                 continue
             for lang_vector, da_vector in zip(all_steering_vectos[language],all_steering_vectos[target_language]):
-                dist = euclidean(lang_vector, da_vector)
+                dist = euclidean(lang_vector.cpu(), da_vector.cpu())
                 d[language].append(dist)
                 
     if distance_metric == "cosine":
@@ -92,7 +91,7 @@ def compute_distance_metric(all_steering_vectos:dict, target_language:str , dist
             if language == target_language:
                 continue
             for lang_vector, da_vector in zip(all_steering_vectos[language],all_steering_vectos[target_language]):
-                dist = cosine(lang_vector, da_vector)
+                dist = cosine(lang_vector.cpu(), da_vector.cpu())
                 d[language].append(dist)
                 
     elif distance_metric == "mahalanobis":
@@ -100,10 +99,10 @@ def compute_distance_metric(all_steering_vectos:dict, target_language:str , dist
             if language == target_language:
                 continue
             for lang_vector, da_vector in zip(all_steering_vectos[language],all_steering_vectos[target_language]):
-                V = np.cov(np.array([lang_vector, da_vector]).T)
+                V = np.cov(np.array([lang_vector.cpu(), da_vector.cpu()]).T)
                 #Maybe we need to find a better covariance matrix. Maybe it needs to be for all vectors???
                 IV = np.linalg.pinv(V) #pseudoinverse due to the matrix V being singular
-                dist = mahalanobis(lang_vector, da_vector,IV)
+                dist = mahalanobis(lang_vector.cpu(), da_vector.cpu(),IV)
                 d[language].append(dist)
     else:
         raise "The distance metric provided to the function is not allowed. Currently only euclidean, and mahalanobis are allowed"

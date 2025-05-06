@@ -9,7 +9,13 @@ from utils.plotting import plot_activations_PCA
 from utils.preprocessing import load_txt_data
 
 def run(model_name):
-    
+    """
+    the figure is saved at: "results/PCA_activations/*model_name*"
+    """
+
+
+
+    saved_path = "results/PCA_activations/"
     # loads model
     model, tokenizer, device = model_setup(model_name)
     hidden_layers = model.config.num_hidden_layers
@@ -60,10 +66,12 @@ def run(model_name):
 
         # plot as pca
         plot_activations_PCA(activations_by_language, layer=layer, ax=axs[layer])
-    
+
+    if "download" in model_name:
+        model_name = model_name.split("/")[-1]
 
     fig.tight_layout()
-    
-
+    Path(saved_path).mkdir(parents=True, exist_ok=True)
+    fig.savefig(f"{saved_path}/{model_name}.png")
 
 

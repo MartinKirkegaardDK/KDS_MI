@@ -6,7 +6,7 @@ from utils.distance_plots import plot_distances, compute_distance_metric, load_a
 
 
 
-def run(target_language: str, steering_vector_path:str ,distance_metric: str ):
+def run(model_name:str, target_language: str, steering_vector_path:str ,distance_metric: str):
     """computes the distance plots
 
     Args:
@@ -19,4 +19,4 @@ def run(target_language: str, steering_vector_path:str ,distance_metric: str ):
 
     distance_dict = compute_distance_metric(all_steering_vectos, target_language, distance_metric)
     
-    plot_distances(distance_dict,target_language,distance_metric)
+    plot_distances(distance_dict,target_language,distance_metric,model_name)

@@ -12,6 +12,10 @@ def run(
         steering_vector_folder, 
         model_name
     ):
+    """
+    Plots the steering loss and saves it at: results/steering_loss/*model_name*
+    """
+    saved_path = "results/steering_loss"
 
     # loads model
     model, tokenizer, device = model_setup(model_name)
@@ -24,7 +28,6 @@ def run(
         lan2='en'
     )
 
-    # loads steering vectors by layer
     steering_vector_folder = Path(steering_vector_folder)
     num_layers = model.config.num_hidden_layers
     steering_vectors_by_layer = {
@@ -32,14 +35,14 @@ def run(
         for layer in range(num_layers)
     }
 
-    # plots losses on bible data
-
-
     steering_lambdas = [-1, -2, -5, -10, -15]
-    fig, axs = plt.subplots(len(steering_lambdas), 1, figsize=(10, len(steering_lambdas * 3)))
-    axs = axs.flatten()
+    Path(saved_path).mkdir(parents=True, exist_ok=True)
 
-    for idx, steering_lambda in enumerate(steering_lambdas):
+    if "download" in model_name:
+        model_name = model_name.split("/")[-1]
+
+    for steering_lambda in steering_lambdas:
+        fig, ax = plt.subplots(1, 1, figsize=(10, 3))  # One figure per lambda
         plot_loss_for_steering_vectors(
             model,
             tokenizer,
@@ -49,8 +52,8 @@ def run(
             lan1='en',
             lan2='da',
             amount_datapoints=100,
-            ax=axs[idx]
+            ax=ax
         )
-
-    fig.tight_layout()
-
+        fig.tight_layout()
+        fig.savefig(f"{saved_path}/{model_name}_lambda_{steering_lambda}.png")
+        plt.close(fig)  # Important to prevent memory issues in long runs

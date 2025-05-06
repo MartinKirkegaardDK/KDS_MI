@@ -85,8 +85,8 @@ def run(model_name, reg_lambdas):
         meta_data['reg_lambda'] = reg_lambda
 
         # initiates all the probes and corresponding data loaders
-        print("Initiate classes")
-        probe_by_layer, act_loader_by_layer = create_classes_by_layer(meta_data, activation_ds_by_layer, device)
+        #print("Initiate classes")
+        #probe_by_layer, act_loader_by_layer = create_classes_by_layer(meta_data, activation_ds_by_layer, device)
 
 
         # We bootstrap the data and train 10 probes for each layer in order to get "confidence intervals"
@@ -104,7 +104,8 @@ def run(model_name, reg_lambdas):
         # saves data used in plots
         
         d['map_label'] = map_lab
-        
+        if "downloaded" in model_name:
+            model_name = model_name.split("/")[-1]
         reg_lambda_output_file = data_output_folder / f"{model_name.replace('/', '-')}_reg_lambda_{meta_data['reg_lambda']}.json"
         with open(str(reg_lambda_output_file), 'w') as file:
             json.dump(d, file, indent=4)

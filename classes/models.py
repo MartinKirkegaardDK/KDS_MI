@@ -35,7 +35,8 @@ class ClassificationProbe(nn.Module):
         
         self.used_labels = set()
         for labels in self.all_labels:
-            unique_labels = set(np.array(labels))
+      
+            unique_labels = set(np.array(labels.cpu()))
             [self.used_labels.add(x) for x in unique_labels]
         
 

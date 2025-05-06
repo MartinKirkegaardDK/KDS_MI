@@ -1,11 +1,17 @@
 import json
 from matplotlib import pyplot as plt
 from utils.plotting import plot_probe_results
+from pathlib import Path
 
 def run(
-        probe_result_path_by_reg_lambda: dict[float, str]
+        probe_result_path_by_reg_lambda: dict[str,float],
+        model_name: str
     ) -> None:
+    """
+    Plots the probes and saves them at: results/probe_confidence_intervals/*model_name*
+    """
 
+    saved_path = "results/probe_confidence_intervals"
     # make figure
     num_reg_lambdas = len(probe_result_path_by_reg_lambda.keys())
     fig, axs = plt.subplots(ncols=2, nrows=num_reg_lambdas // 2 + int(num_reg_lambdas % 2 != 0), figsize=(20, 3*num_reg_lambdas))
@@ -26,5 +32,10 @@ def run(
             ax=axs[idx]
         )
 
+    if "download" in model_name:
+        model_name = model_name.split("/")[-1]
+
     fig.tight_layout()
+    Path(saved_path).mkdir(parents=True, exist_ok=True)
+    fig.savefig(f"{saved_path}/{model_name}.png")
 
