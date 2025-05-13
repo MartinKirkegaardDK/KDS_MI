@@ -32,7 +32,7 @@ freeResources
 srun --nodes=1 --ntasks-per-node=1 --gres=gpu:a30 --mem=100G --time=02:00:00 --partition=scavenge singularity exec --nv /home/mamy/containers/scandeval-cuda126.sif scandeval -m "gpt_gptsw3_en_da_356m_gbs1024" -l "da" --only-validation-split
 
 
+srun --nodes=1 --ntasks-per-node=1 --gres=gpu:a30 --mem=100G --time=02:00:00 --partition=scavenge singularity exec --nv /home/mamy/containers/scandeval-cuda126.sif scandeval -m "gpt_gptsw3_en_da_is_356m_gbs1024" -l "da" --only-validation-split
 
-
-#This screen 2253478.pts-19.slurmhead is the one running scandeval -m "AI-Sweden-Models/gpt-sw3-356m" -l "da" --only-validation-split
-#This screen 2265432.pts-9.slurmhead is running the large uncommented srun command
+#this screen 516528.pts-9.slurmhead runs gpt_gptsw3_en_is_da_356m_gbs1024
+#this screen 523827.pts-9.slurmhead runs gpt_gptsw3_en_da_is_356m_gbs1024
