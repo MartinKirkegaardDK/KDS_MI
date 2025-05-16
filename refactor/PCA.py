@@ -101,8 +101,8 @@ def plot_PCA(transformed, ax, colors=None):
     ax.legend()
 
 
-def main(model_url):
-    model = AutoModelForCausalLM.from_pretrained(model_url)
+def main(model_url, device):
+    model = AutoModelForCausalLM.from_pretrained(model_url).to(device)
     tokenizer = AutoTokenizer.from_pretrained(model_url)
 
     loader = DataLoader(load_antibiotic_data(file_paths=FilePaths.antibiotic), shuffle=True, batch_size=32)
@@ -167,4 +167,4 @@ def main(model_url):
 
 
 if __name__ == '__main__':
-    main(model_url='EleutherAI/pythia-14m')
+    main(model_url='EleutherAI/pythia-14m', device='cpu')
