@@ -108,7 +108,7 @@ def main(model_url):
     loader = DataLoader(load_antibiotic_data(file_paths=FilePaths.antibiotic), shuffle=True, batch_size=32)
 
 
-    fig, axs = plt.subplots(24, 6, figsize=(20, 20))
+    fig, axs = plt.subplots(24, 6, figsize=(20, 80))
 
 
     # before layernorm_1
