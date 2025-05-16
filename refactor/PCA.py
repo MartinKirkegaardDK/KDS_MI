@@ -114,6 +114,9 @@ def main(model_url, device):
     # before layernorm_1
     activations = get_activations(loader, model, tokenizer, hookpoint_fn=Hookpoints.layernorm_1(model), max_batches=20, pre=True)
 
+    for key, val in activations.items():
+        activations[key] = val.cpu()
+
     for layer in range(6):
         transformed = compute_PCA_2(activations[layer])
 
@@ -121,6 +124,9 @@ def main(model_url, device):
 
     # before attention
     activations = get_activations(loader, model, tokenizer, hookpoint_fn=Hookpoints.attention(model), max_batches=20, pre=True)
+
+    for key, val in activations.items():
+        activations[key] = val.cpu()
 
 
     for layer in range(6):
@@ -131,6 +137,9 @@ def main(model_url, device):
     # after attention
     activations = get_activations(loader, model, tokenizer, hookpoint_fn=Hookpoints.attention(model), max_batches=20)
 
+    for key, val in activations.items():
+        activations[key] = val.cpu()
+
     for layer in range(6):
         transformed = compute_PCA_2(activations[layer])
 
@@ -138,6 +147,9 @@ def main(model_url, device):
 
     # before layernorm_2
     activations = get_activations(loader, model, tokenizer, hookpoint_fn=Hookpoints.layernorm_2(model), max_batches=20, pre=True)
+
+    for key, val in activations.items():
+        activations[key] = val.cpu()
 
     for layer in range(6):
         transformed = compute_PCA_2(activations[layer])
@@ -147,6 +159,9 @@ def main(model_url, device):
     # before mlp
     activations = get_activations(loader, model, tokenizer, hookpoint_fn=Hookpoints.mlp(model), max_batches=20, pre=True)
 
+    for key, val in activations.items():
+        activations[key] = val.cpu()
+
     for layer in range(6):
         transformed = compute_PCA_2(activations[layer])
 
@@ -155,6 +170,9 @@ def main(model_url, device):
 
     # after mlp
     activations = get_activations(loader, model, tokenizer, hookpoint_fn=Hookpoints.mlp(model), max_batches=20)
+
+    for key, val in activations.items():
+        activations[key] = val.cpu()
 
     for layer in range(6):
         transformed = compute_PCA_2(activations[layer])
