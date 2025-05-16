@@ -1,22 +1,38 @@
 from transformers import GPTNeoXForCausalLM, GPT2LMHeadModel
 
 class Hookpoints:
-    
+
     @staticmethod
-    def extraction(model, layer):
-        _extraction = {
+    def layernorm_1(model):
+        hookpoints = {
             GPTNeoXForCausalLM: lambda layer: f'gpt_neox.layers.{layer}.input_layernorm',
             GPT2LMHeadModel: lambda layer: f'transformer.h.{layer}.ln_1'
         }
-        return _extraction[type(model)](layer)
+        return hookpoints[type(model)]
     
     @staticmethod
-    def steering(model, layer):
-        _steering = {
+    def layernorm_2(model):
+        hookpoints = {
+            GPTNeoXForCausalLM: lambda layer: f'gpt_neox.layers.{layer}.post_attention_layernorm',
+            GPT2LMHeadModel: lambda layer: f'transformer.h.{layer}.ln_2'
+        }
+        return hookpoints[type(model)]
+    
+    @staticmethod
+    def attention(model):
+        hookpoints = {
+            GPTNeoXForCausalLM: lambda layer: f'gpt_neox.layers.{layer}.attention',
+            GPT2LMHeadModel: lambda layer: f'transformer.h.{layer}.attn'
+        }
+        return hookpoints[type(model)]
+    
+    @staticmethod
+    def mlp(model):
+        hookpoints = {
             GPTNeoXForCausalLM: lambda layer: f'gpt_neox.layers.{layer}.mlp',
             GPT2LMHeadModel: lambda layer: f'gpt_neox.layers.{layer}.mlp'
         }
-        return _steering[type(model)](layer)
+        return hookpoints[type(model)]
     
 
 class ModelConfig:

@@ -1,6 +1,7 @@
 from torch.utils.data import DataLoader
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from tqdm import tqdm
+from collections import defaultdict
 
 from utils.compatibility import Hookpoints, ModelConfig, Device
 from utils.data import ActivationDataset
@@ -19,26 +20,39 @@ class HookManager():
             hook.remove()
         self.hooks.clear()
 
-    def extract(self, layer):
-        extracted_output = []
-        def extract_hook(module, input, output):
-            extracted_output.append(input[0].squeeze(0).detach())
+    def extract(self, hookpoint, pre=False):
+        extracted = []
+        
+        if pre:
+            def extract_hook(module, input):
+                extracted.append(input[0].squeeze(0).detach())
+            self.hooks.append(
+                self.model.get_submodule(hookpoint).register_forward_pre_hook(extract_hook)
+            )
+        else:
+            def extract_hook(module, input, output):
+                extracted.append(output[0].squeeze(0).detach())
+            self.hooks.append(
+                self.model.get_submodule(hookpoint).register_forward_hook(extract_hook)
+            )
+        
 
-        hookpoint = Hookpoints.extraction(self.model, layer)
-        self.hooks.append(
-            self.model.get_submodule(hookpoint).register_forward_hook(extract_hook)
-        )
-
-        return extracted_output
+        return extracted
     
-    def steer(self, layer, steering_vector, scalar):
-        def steering_hook(module, input, output):
-            return output[0] + steering_vector * scalar
-
-        hookpoint = Hookpoints.steering(self.model, layer)
-        self.hooks.append(
-            self.model.get_submodule(hookpoint).register_forward_hook(steering_hook)
-        )
+    def steer(self, hookpoint, steering_vector, scalar, pre=False):
+        
+        if pre:
+            def steering_hook(module, input):
+                return input[0] + steering_vector * scalar
+            self.hooks.append(
+                self.model.get_submodule(hookpoint).register_forward_pre_hook(steering_hook)
+            )
+        else:
+            def steering_hook(module, input, output):
+                return output[0] + steering_vector * scalar
+            self.hooks.append(
+                self.model.get_submodule(hookpoint).register_forward_hook(steering_hook)
+            )
 
 
 
@@ -46,6 +60,8 @@ def get_activations(
         loader: DataLoader, 
         model:AutoModelForCausalLM,
         tokenizer: AutoTokenizer, 
+        hookpoint_fn,
+        pre=False,
         label_map=None,
         layers=None,
         max_batches=None
@@ -59,7 +75,6 @@ def get_activations(
 
     if tokenizer.pad_token == None:
         tokenizer.pad_token = tokenizer.eos_token
-
 
 
     activation_ds = {
@@ -78,7 +93,7 @@ def get_activations(
         with HookManager(model) as hook_manager:
 
             for layer in layers:
-                extracted[layer] = hook_manager.extract(layer=layer)
+                extracted[layer] = hook_manager.extract(hookpoint=hookpoint_fn(layer), pre=pre)
 
             tokenized = tokenizer(
                 text,
