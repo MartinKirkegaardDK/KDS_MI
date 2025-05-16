@@ -32,7 +32,7 @@ def combine_bible_data(bible_dat_path: str, language_prediction_model: _FastText
         danish_prompt_score_list.append(round(prediction, 2))
         
         english_prompt = row["english_predicted_output"]
-        prediction = predict_language(language_prediction_model,"__label__dan",english_prompt)
+        prediction = predict_language(language_prediction_model,"__label__eng",english_prompt)
         english_prompt_score_list.append(round(prediction,2))
 
     loaded_df["danish_prompt_score"] = danish_prompt_score_list
@@ -65,6 +65,7 @@ def predict_language(language_prediction_model:_FastText, language:str, text:str
         raise  ValueError(f"language {language} is not in supported language format: {supported_languages}")
     labels, score = language_prediction_model.predict(text, k = 13)
     for i in range(len(labels)):
+        #print(language, labels[i], score[i])
         if language in labels[i]:
             return score[i]
     
