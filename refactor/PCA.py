@@ -117,7 +117,7 @@ def main(model_url, device):
     for key, val in activations.items():
         activations[key] = val.cpu()
 
-    for layer in range(6):
+    for layer in range(24):
         transformed = compute_PCA_2(activations[layer])
 
         plot_PCA(transformed, axs[layer][0])
@@ -129,7 +129,7 @@ def main(model_url, device):
         activations[key] = val.cpu()
 
 
-    for layer in range(6):
+    for layer in range(24):
         transformed = compute_PCA_2(activations[layer])
 
         plot_PCA(transformed, axs[layer][1])
@@ -140,7 +140,7 @@ def main(model_url, device):
     for key, val in activations.items():
         activations[key] = val.cpu()
 
-    for layer in range(6):
+    for layer in range(24):
         transformed = compute_PCA_2(activations[layer])
 
         plot_PCA(transformed, axs[layer][2])
@@ -151,7 +151,7 @@ def main(model_url, device):
     for key, val in activations.items():
         activations[key] = val.cpu()
 
-    for layer in range(6):
+    for layer in range(24):
         transformed = compute_PCA_2(activations[layer])
 
         plot_PCA(transformed, axs[layer][3])
@@ -162,7 +162,7 @@ def main(model_url, device):
     for key, val in activations.items():
         activations[key] = val.cpu()
 
-    for layer in range(6):
+    for layer in range(24):
         transformed = compute_PCA_2(activations[layer])
 
         plot_PCA(transformed, axs[layer][4])
@@ -174,7 +174,7 @@ def main(model_url, device):
     for key, val in activations.items():
         activations[key] = val.cpu()
 
-    for layer in range(6):
+    for layer in range(24):
         transformed = compute_PCA_2(activations[layer])
 
         plot_PCA(transformed, axs[layer][5])
