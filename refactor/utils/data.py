@@ -1,6 +1,7 @@
 import torch
 from torch.utils.data import Dataset, Subset
 from dataclasses import dataclass
+import random
 
 antibiotic_folder = lambda lan: f'data/antibiotic/{lan}.txt'
 
@@ -103,11 +104,12 @@ class ActivationDataset(ClassificationDataset):
             label_map=label_map
         )
 
-    def add_with_mask(self, acts, labels, masks):
+    def add_with_mask(self, acts, labels, masks, sampling_prob=1):
         for act, label, mask in zip(acts, labels, masks):
             if mask:
-                self.predictors.append(act)
-                self.labels.append(label)
+                if sampling_prob == 1 or random.random() < sampling_prob:
+                    self.predictors.append(act)
+                    self.labels.append(label)
 
 
     def filter_by_language(self, language, return_tensors=False):
