@@ -7,6 +7,8 @@ from collections import defaultdict
 from utils.compatibility import Hookpoints, HookAddress, ModelConfig, Device
 from utils.data import ActivationDataset
 
+import gc
+
 class HookManager():
 
     def __init__(self, model):
@@ -144,7 +146,8 @@ def get_activations(
                 return_tensors='pt'
             ).to(Device.device(model))
 
-            model(**tokenized)
+            out = model(**tokenized)
+            del out
 
 
         # shapa data to fit in dataset class
@@ -161,6 +164,8 @@ def get_activations(
         del to_add
         del attn_mask
         del label
+
+        gc.collect()
         if Device.device(model) == torch.device('cuda:0'):
             torch.cuda.empty_cache()
             
