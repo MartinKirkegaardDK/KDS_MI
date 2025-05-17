@@ -43,7 +43,7 @@ class Hookpoints:
     def mlp(model):
         hookpoints = {
             GPTNeoXForCausalLM: lambda layer: f'gpt_neox.layers.{layer}.mlp',
-            GPT2LMHeadModel: lambda layer: f'gpt_neox.layers.{layer}.mlp'
+            GPT2LMHeadModel: lambda layer: f'transformer.h.{layer}.mlp'
         }
         return hookpoints[type(model)]
 
