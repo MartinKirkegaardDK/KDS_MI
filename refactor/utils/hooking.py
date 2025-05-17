@@ -157,6 +157,10 @@ def get_activations(
                 # add to dataset
                 activation_ds[hook_address.layer(layer)].add_with_mask(to_add, label, attn_mask, sampling_prob=0.05)
 
+        del extracted
+        del to_add
+        del attn_mask
+        del label
         if Device.device(model) == torch.device('cuda:0'):
             torch.cuda.empty_cache()
             
