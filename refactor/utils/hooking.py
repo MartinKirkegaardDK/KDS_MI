@@ -1,3 +1,4 @@
+import torch
 from torch.utils.data import DataLoader
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from tqdm import tqdm
@@ -156,7 +157,8 @@ def get_activations(
                 # add to dataset
                 activation_ds[hook_address.layer(layer)].add_with_mask(to_add, label, attn_mask, sampling_prob=0.05)
 
-
+        if Device.device(model) == torch.device('cuda:0'):
+            torch.cuda.empty_cache()
             
     return activation_ds
 
