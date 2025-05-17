@@ -1,4 +1,17 @@
 from transformers import GPTNeoXForCausalLM, GPT2LMHeadModel
+from enum import Enum
+
+class HookAddress(Enum):
+    layernorm_1_pre = 'layernorm_1:pre'
+    attention_pre = 'attention:pre'
+    attention_post = 'attention:post'
+    layernorm_2_pre = 'layernorm_2:pre'
+    mlp_pre = 'mlp:pre'
+    mlp_post = 'mlp:post'
+
+    def layer(self, layer):
+        return f'layer.{layer}.{self.value}'
+
 
 class Hookpoints:
 
@@ -33,7 +46,31 @@ class Hookpoints:
             GPT2LMHeadModel: lambda layer: f'gpt_neox.layers.{layer}.mlp'
         }
         return hookpoints[type(model)]
-    
+
+    @staticmethod
+    def from_address(address, model):
+
+        def to_method(component):
+            if component == 'layernorm_1':
+                return Hookpoints.layernorm_1(model)
+            if component == 'layernorm_2':
+                return Hookpoints.layernorm_2(model)
+            if component == 'attention':
+                return Hookpoints.attention(model)
+            if component == 'mlp':
+                return Hookpoints.mlp(model)
+
+        if ':' in address:
+            address, _ = address.split(':')
+
+        if 'layer' in address:
+            _, layer, component = address.split('.')
+            return to_method(component)(layer)
+        else:
+            return to_method(address)
+
+        
+
 
 class ModelConfig:
 

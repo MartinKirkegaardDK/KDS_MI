@@ -116,7 +116,7 @@ class ActivationDataset(ClassificationDataset):
             return super().filter_by_language(language)   
 
         acts, labels = zip(*super().filter_by_language(language))
-        return torch.stack(acts, dim=0)
+        return torch.stack(acts, dim=0).detach()
     
 
 

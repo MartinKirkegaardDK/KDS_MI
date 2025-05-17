@@ -3,10 +3,11 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from tqdm import tqdm
 from collections import defaultdict
 
-from utils.compatibility import Hookpoints, ModelConfig, Device
+from utils.compatibility import Hookpoints, HookAddress, ModelConfig, Device
 from utils.data import ActivationDataset
 
 class HookManager():
+
     def __init__(self, model):
         self.model = model
         self.hooks = []
@@ -20,55 +21,90 @@ class HookManager():
             hook.remove()
         self.hooks.clear()
 
-    def extract(self, hookpoint, pre=False):
+    def _pre_extract(self, hookpoint):
+
         extracted = []
-        
-        if pre:
-            def extract_hook(module, input):
-                extracted.append(input[0].squeeze(0).detach())
-            self.hooks.append(
-                self.model.get_submodule(hookpoint).register_forward_pre_hook(extract_hook)
-            )
-        else:
-            def extract_hook(module, input, output):
-                extracted.append(output[0].squeeze(0).detach())
-            self.hooks.append(
-                self.model.get_submodule(hookpoint).register_forward_hook(extract_hook)
-            )
-        
+
+        def extract_hook(module, input):
+            extracted.append(input[0].squeeze(0).detach())
+
+        self.hooks.append(
+            self.model.get_submodule(hookpoint).register_forward_pre_hook(extract_hook)
+        )
 
         return extracted
-    
-    def steer(self, hookpoint, steering_vector, scalar, pre=False):
-        
-        if pre:
-            def steering_hook(module, input):
-                return input[0] + steering_vector * scalar
-            self.hooks.append(
-                self.model.get_submodule(hookpoint).register_forward_pre_hook(steering_hook)
-            )
-        else:
-            def steering_hook(module, input, output):
-                return output[0] + steering_vector * scalar
-            self.hooks.append(
-                self.model.get_submodule(hookpoint).register_forward_hook(steering_hook)
-            )
 
+    def _post_extract(self, hookpoint):
+
+        extracted = []
+
+        def extract_hook(module, input, output):
+            extracted.append(output[0].squeeze(0).detach())
+
+        self.hooks.append(
+            self.model.get_submodule(hookpoint).register_forward_hook(extract_hook)
+        )
+
+        return extracted
+
+    def _pre_steer(self, hookpoint, steering_vector, scalar):
+
+        def steering_hook(module, input):
+            return input[0] + steering_vector * scalar
+        
+        self.hooks.append(
+            self.model.get_submodule(hookpoint).register_forward_pre_hook(steering_hook)
+        )
+
+    def _post_steer(self, hookpoint, steering_vector, scalar):
+
+        def steering_hook(module, input, output):
+            return output[0] + steering_vector * scalar
+        
+        self.hooks.append(
+            self.model.get_submodule(hookpoint).register_forward_hook(steering_hook)
+        )
+
+    def extract(self, hook_address):
+
+        address, placement = hook_address.split(':')
+
+        if placement == 'pre':
+            return self._pre_extract(Hookpoints.from_address(address, self.model))
+        if placement == 'post':
+            return self._post_extract(Hookpoints.from_address(address, self.model))
+        
+        raise(Exception("hook_address has to end with either ``pre'' or ``post''"))
+    
+    def steer(self, hook_address, steering_vector, scalar):
+
+        address, placement = hook_address.split(':')
+
+        if placement == 'pre':
+            return self._pre_steer(Hookpoints.from_address(address, self.model), steering_vector, scalar)
+        if placement == 'post':
+            return self._post_steer(Hookpoints.from_address(address, self.model), steering_vector, scalar)
+        
+        raise(Exception("hook_address has to end with either ``pre'' or ``post''"))
+
+        
 
 
 def get_activations(
         loader: DataLoader, 
         model:AutoModelForCausalLM,
         tokenizer: AutoTokenizer, 
-        hookpoint_fn,
-        pre=False,
-        label_map=None,
+        hook_addresses=None,
         layers=None,
+        label_map=None,
         max_batches=None
         ) -> dict: 
 
     if not layers:
         layers = list(range(ModelConfig.hidden_layers(model)))
+
+    if not hook_addresses:
+        hook_addresses = list(HookAddress)
 
     if label_map == None:
         label_map = loader.dataset.label_map
@@ -76,10 +112,14 @@ def get_activations(
     if tokenizer.pad_token == None:
         tokenizer.pad_token = tokenizer.eos_token
 
+    if max_batches == None:
+        max_batches = float('inf')
+
 
     activation_ds = {
-        layer: ActivationDataset(label_map=label_map)
+        hook_address.layer(layer): ActivationDataset(label_map=label_map)
         for layer in layers
+            for hook_address in hook_addresses
     }
 
     for ind, (text, label) in enumerate(tqdm(loader)):
@@ -93,7 +133,8 @@ def get_activations(
         with HookManager(model) as hook_manager:
 
             for layer in layers:
-                extracted[layer] = hook_manager.extract(hookpoint=hookpoint_fn(layer), pre=pre)
+                for hook_address in hook_addresses:
+                    extracted[hook_address.layer(layer)] = hook_manager.extract(hook_address.layer(layer))
 
             tokenized = tokenizer(
                 text,
@@ -109,11 +150,13 @@ def get_activations(
         attn_mask = tokenized.attention_mask.flatten() # # flattening [batch, pad_size, ...] to [tokens, ...]
         label = label.unsqueeze(-1).expand(-1, tokenized.attention_mask.shape[1]).flatten() # [tokens]
         for layer in layers:
-            extracted[layer] = extracted[layer][0].view(-1, ModelConfig.hidden_size(model)) # [tokens, hidden_size]
+            for hook_address in hook_addresses:
+                to_add = extracted[hook_address.layer(layer)][0].view(-1, ModelConfig.hidden_size(model)) # [tokens, hidden_size]
 
-        # add to appropriate dataset
-        for layer in layers:
-            activation_ds[layer].add_with_mask(extracted[layer], label, attn_mask)
+                # add to dataset
+                activation_ds[hook_address.layer(layer)].add_with_mask(to_add, label, attn_mask)
+
+            
     return activation_ds
 
 
