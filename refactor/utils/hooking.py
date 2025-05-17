@@ -151,14 +151,14 @@ def get_activations(
 
 
         # shapa data to fit in dataset class
-        attn_mask = tokenized.attention_mask.flatten() # # flattening [batch, pad_size, ...] to [tokens, ...]
-        label = label.unsqueeze(-1).expand(-1, tokenized.attention_mask.shape[1]).flatten() # [tokens]
+        attn_mask = tokenized.attention_mask.flatten().cpu() # # flattening [batch, pad_size, ...] to [tokens, ...]
+        label = label.unsqueeze(-1).expand(-1, tokenized.attention_mask.shape[1]).flatten().cpu() # [tokens]
         for layer in layers:
             for hook_address in hook_addresses:
-                to_add = extracted[hook_address.layer(layer)][0].view(-1, ModelConfig.hidden_size(model)) # [tokens, hidden_size]
+                to_add = extracted[hook_address.layer(layer)][0].view(-1, ModelConfig.hidden_size(model)).cpu() # [tokens, hidden_size]
 
                 # add to dataset
-                # activation_ds[hook_address.layer(layer)].add_with_mask(to_add, label, attn_mask, sampling_prob=0.05)
+                activation_ds[hook_address.layer(layer)].add_with_mask(to_add, label, attn_mask, sampling_prob=0.05)
 
         del extracted
         del to_add
