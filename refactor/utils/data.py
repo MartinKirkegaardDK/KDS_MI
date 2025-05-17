@@ -3,6 +3,8 @@ from torch.utils.data import Dataset, Subset
 from dataclasses import dataclass
 import random
 
+import gc
+
 antibiotic_folder = lambda lan: f'data/antibiotic/{lan}.txt'
 
 class FilePaths:    
@@ -110,6 +112,10 @@ class ActivationDataset(ClassificationDataset):
                 if sampling_prob == 1 or random.random() < sampling_prob:
                     self.predictors.append(act)
                     self.labels.append(label)
+                    
+        del act, acts, label, labels, mask, masks
+        gc.collect()
+
 
 
     def filter_by_language(self, language, return_tensors=False):
