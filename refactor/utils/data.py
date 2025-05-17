@@ -112,9 +112,9 @@ class ActivationDataset(ClassificationDataset):
                 if sampling_prob == 1 or random.random() < sampling_prob:
                     self.predictors.append(act)
                     self.labels.append(label)
-                    
+
         del act, acts, label, labels, mask, masks
-        gc.collect()
+        # gc.collect()
 
 
 
