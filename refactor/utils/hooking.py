@@ -100,7 +100,8 @@ def get_activations(
         hook_addresses=None,
         layers=None,
         label_map=None,
-        max_batches=None
+        max_batches=None,
+        sampling_prob=1
         ) -> dict: 
 
     if not layers:
@@ -158,14 +159,14 @@ def get_activations(
                 to_add = extracted[hook_address.layer(layer)][0].view(-1, ModelConfig.hidden_size(model)).detach().cpu() # [tokens, hidden_size]
 
                 # add to dataset
-                activation_ds[hook_address.layer(layer)].add_with_mask(to_add, label, attn_mask, sampling_prob=0.00005)
+                activation_ds[hook_address.layer(layer)].add_with_mask(to_add, label, attn_mask, sampling_prob=sampling_prob)
 
-        del extracted
-        del to_add
-        del attn_mask
-        del label
+        # del extracted
+        # del to_add
+        # del attn_mask
+        # del label
 
-        gc.collect()
+        # gc.collect()
         if Device.device(model) == torch.device('cuda:0'):
             torch.cuda.empty_cache()
             
