@@ -29,7 +29,9 @@ class HookManager():
         extracted = []
 
         def extract_hook(module, input):
-            extracted.append(input[0].squeeze(0).detach())
+            if type(input) == tuple:
+                input = input[0]
+            extracted.append(input.squeeze(0).detach())
 
         self.hooks.append(
             self.model.get_submodule(hookpoint).register_forward_pre_hook(extract_hook)
@@ -42,7 +44,9 @@ class HookManager():
         extracted = []
 
         def extract_hook(module, input, output):
-            extracted.append(output[0].squeeze(0).detach())
+            if type(output) == tuple:
+                output = output[0]
+            extracted.append(output.squeeze(0).detach())
 
         self.hooks.append(
             self.model.get_submodule(hookpoint).register_forward_hook(extract_hook)
@@ -53,7 +57,9 @@ class HookManager():
     def _pre_steer(self, hookpoint, steering_vector, scalar):
 
         def steering_hook(module, input):
-            return input[0] + steering_vector * scalar
+            if type(input) == tuple:
+                input = input[0]
+            return input + steering_vector * scalar
         
         self.hooks.append(
             self.model.get_submodule(hookpoint).register_forward_pre_hook(steering_hook)
@@ -62,7 +68,9 @@ class HookManager():
     def _post_steer(self, hookpoint, steering_vector, scalar):
 
         def steering_hook(module, input, output):
-            return output[0] + steering_vector * scalar
+            if type(output) == tuple:
+                output = output[0]
+            return output + steering_vector * scalar
         
         self.hooks.append(
             self.model.get_submodule(hookpoint).register_forward_hook(steering_hook)
