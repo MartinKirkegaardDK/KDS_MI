@@ -110,10 +110,10 @@ class ActivationDataset(ClassificationDataset):
         for act, label, mask in zip(acts, labels, masks):
             if mask:
                 if sampling_prob == 1 or random.random() < sampling_prob:
-                    self.predictors.append(act)
-                    self.labels.append(label)
+                    self.predictors.append(act.cpu())
+                    self.labels.append(label.cpu())
 
-        del act, acts, label, labels, mask, masks
+        # del act, acts, label, labels, mask, masks
         # gc.collect()
 
 
