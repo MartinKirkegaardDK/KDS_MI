@@ -122,21 +122,27 @@ def main(model_url, device, layers=None, hook_addresses=None, out_file=None, lay
             axs = np.array([axs])
 
         for idx in range(layers_this_fig):
+            
             layer = layers[(i * layers_per_fig) + idx]
+
             for idy, hook_address in enumerate(hook_addresses):
+
+                ax = axs[idx][idy]
+
                 transformed = compute_PCA(
                     activations=activations[hook_address.layer(layer)]
                 )
 
-                plot_PCA(transformed, axs[idx][idy])
+                plot_PCA(transformed, ax)
 
+                ax.set_title(hook_address.layer(layer))
+                ax.set_facecolor('white')
 
-                axs[idx][idy].set_title(hook_address.layer(layer))
-
+        fig.patch.set_alpha(0)
         fig.tight_layout()
 
         if out_file:
-            fig.savefig(f'fig_{i+1}_{out_file}', transparent=True, dpi=300)
+            fig.savefig(f'fig_{i+1}_{out_file}', transparent=False, dpi=300)
 
 
 
