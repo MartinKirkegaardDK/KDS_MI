@@ -84,7 +84,7 @@ def plot_PCA(transformed, ax, colors=None):
     ax.legend()
 
 
-def main(model_url, device, layers=None, hook_addresses=None, out_file=None, layers_per_fig=6):
+def main(model_url, device, layers=None, hook_addresses=None, out_file=None, layers_per_fig=6, max_batches=10):
     model = AutoModelForCausalLM.from_pretrained(model_url).to(device)
     tokenizer = AutoTokenizer.from_pretrained(model_url)
 
@@ -102,7 +102,7 @@ def main(model_url, device, layers=None, hook_addresses=None, out_file=None, lay
         tokenizer,
         layers=layers,
         hook_addresses=hook_addresses,
-        max_batches=10,
+        max_batches=max_batches,
         sampling_prob=0.1
     )
 
