@@ -84,7 +84,7 @@ def plot_PCA(transformed, ax, colors=None):
     ax.legend()
 
 
-def main(model_url, device, layers=None, hook_addresses=None, out_file=None):
+def main(model_url, device, layers=None, hook_addresses=None, out_file=None, layers_per_fig=6):
     model = AutoModelForCausalLM.from_pretrained(model_url).to(device)
     tokenizer = AutoTokenizer.from_pretrained(model_url)
 
@@ -102,33 +102,41 @@ def main(model_url, device, layers=None, hook_addresses=None, out_file=None):
         tokenizer,
         layers=layers,
         hook_addresses=hook_addresses,
-        max_batches=20,
+        max_batches=10,
         sampling_prob=0.1
     )
 
-    width = len(hook_addresses) * 3
-    height = len(layers) * 3
-    fig, axs = plt.subplots(len(layers), len(hook_addresses), figsize=(width, height))
-    if type(axs) == Axes:
-        axs = np.array([[axs]])
-    elif len(axs.shape) == 1:
-        axs = np.array([axs])
+    num_figs = (len(layers) // layers_per_fig) + (len(layers) % layers_per_fig > 0)
 
-    for idx, layer in enumerate(layers):
-        for idy, hook_address in enumerate(hook_addresses):
-            transformed = compute_PCA(
-                activations=activations[hook_address.layer(layer)]
-            )
+    remaining_layers = len(layers)
 
-            plot_PCA(transformed, axs[idx][idy])
+    for i in range(num_figs):
+        layers_this_fig = min(layers_per_fig, remaining_layers)
+
+        width = len(hook_addresses) * 3
+        height = layers_this_fig * 3
+        fig, axs = plt.subplots(layers_this_fig, len(hook_addresses), figsize=(width, height))
+        if type(axs) == Axes:
+            axs = np.array([[axs]])
+        elif len(axs.shape) == 1:
+            axs = np.array([axs])
+
+        for idx in range(layers_this_fig):
+            layer = layers[(i * layers_per_fig) + idx]
+            for idy, hook_address in enumerate(hook_addresses):
+                transformed = compute_PCA(
+                    activations=activations[hook_address.layer(layer)]
+                )
+
+                plot_PCA(transformed, axs[idx][idy])
 
 
-            axs[idx][idy].set_title(hook_address.layer(layer))
+                axs[idx][idy].set_title(hook_address.layer(layer))
 
-    fig.tight_layout()
+        fig.tight_layout()
 
-    if out_file:
-        fig.savefig(out_file, transparent=True)
+        if out_file:
+            fig.savefig(f'fig_{i+1}_{out_file}', transparent=True, dpi=300)
 
 
 
