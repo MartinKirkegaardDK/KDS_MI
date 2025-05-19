@@ -102,12 +102,12 @@ def main(model_url, device, layers=None, hook_addresses=None, out_file=None):
         tokenizer,
         layers=layers,
         hook_addresses=hook_addresses,
-        max_batches=10,
+        max_batches=20,
         sampling_prob=0.1
     )
 
-    width = len(hook_addresses) * 4
-    height = len(layers) * 4
+    width = len(hook_addresses) * 3
+    height = len(layers) * 3
     fig, axs = plt.subplots(len(layers), len(hook_addresses), figsize=(width, height))
     if type(axs) == Axes:
         axs = np.array([[axs]])
