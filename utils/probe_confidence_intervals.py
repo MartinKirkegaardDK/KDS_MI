@@ -96,7 +96,7 @@ def train_probe(meta_data,probe_by_layer,act_loader_by_layer, device):
                 #This just fixed the batch slicing
                 if batch_size != 32:
                     break
-                outputs = probe(act)
+                outputs = probe(act.to(device))
                 preds = torch.argmax(outputs, dim=1)  # Get predicted class indices
 
                 # Store labels and predictions (keep them on device)
