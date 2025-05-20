@@ -10,7 +10,7 @@ def run(
     """
     Plots the probes and saves them at: results/probe_confidence_intervals/*model_name*
     """
-
+    output_name = list(probe_result_path_by_reg_lambda.values())[0].replace("results/data/probe_confidence_intervals/","")
     saved_path = "results/probe_confidence_intervals"
     # make figure
     num_reg_lambdas = len(probe_result_path_by_reg_lambda.keys())
@@ -37,5 +37,5 @@ def run(
 
     fig.tight_layout()
     Path(saved_path).mkdir(parents=True, exist_ok=True)
-    fig.savefig(f"{saved_path}/{model_name}.png")
+    fig.savefig(f"{saved_path}/{output_name}.png")
 

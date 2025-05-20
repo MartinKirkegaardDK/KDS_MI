@@ -43,7 +43,6 @@ def idk(model_name,model_name_temp, reg_lambdas):
     meta_data["hidden_layers"] = ModelConfig.hidden_layers(model)
     meta_data["model_name"] = model_name.split("/")[0]
     meta_data["learning_rate"] = 0.001
-    meta_data["reg_lambda"] = 10
     meta_data["amount_epochs"] = 1
 
 
