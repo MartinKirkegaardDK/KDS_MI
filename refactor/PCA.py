@@ -146,14 +146,5 @@ def main(model_url, device, layers=None, hook_addresses=None, out_file=None, lay
 
 
 
-
-
-    
-
-
-
-
-
-
 if __name__ == '__main__':
     main(model_url='EleutherAI/pythia-14m', device='cpu')
