@@ -57,7 +57,7 @@ def idk(model_name,model_name_temp, reg_lambdas):
         tokenizer=tokenizer,
         hook_addresses=None,
         layers=None,
-        max_batches=2,
+        max_batches=20,
         sampling_prob=0.1
     )
     
