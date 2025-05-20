@@ -22,9 +22,6 @@ def idk(model_name,model_name_temp, reg_lambdas):
         reg_lambdas (_type_): _description_
     """
 
-    model_name = "downloaded_models/gpt_gptsw3_en_is_da_356m_gbs1024"
-
-
     # loads model
     print("Load model")
     model, tokenizer, device = model_setup(model_name)
