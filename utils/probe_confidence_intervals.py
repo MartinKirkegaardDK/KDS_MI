@@ -222,6 +222,7 @@ def create_bootstrap_dataset(activation_ds_by_layer):
 def bootstrap(n, meta_data,activation_ds_by_layer, device):
     li = []
     for i in range(n):
+       #print(activation_ds_by_layer,"grr")
         new_activation_ds_by_layer = create_bootstrap_dataset(activation_ds_by_layer)
         probe_by_layer, act_loader_by_layer = create_classes_by_layer(meta_data, new_activation_ds_by_layer, device)
         train_probe(meta_data, probe_by_layer,act_loader_by_layer, device)

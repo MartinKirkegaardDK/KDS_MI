@@ -92,24 +92,26 @@ def idk(model_name,model_name_temp, reg_lambdas):
     for pos in positions:
         
         acts_ds_by_layer = d[pos]
+        print(acts_ds_by_layer, pos, "hi")
         for reg_lambda in reg_lambdas:
+            #print()
             meta_data['reg_lambda'] = reg_lambda
             boot = bootstrap(10, meta_data, acts_ds_by_layer, device)
             map_lab = ds.map_label
 
             
-            d = defaultdict(list)
+            d_temp = defaultdict(list)
             for run in boot:
                 for layer in run.keys():
                     class_accuracies = run[layer].class_accuracies
-                    d[layer].append(class_accuracies)
+                    d_temp[layer].append(class_accuracies)
 
 
 
             # saves data used in plots
             
-            d['map_label'] = map_lab
+            d_temp['map_label'] = map_lab
 
             reg_lambda_output_file = data_output_folder / f"{model_name_temp}_{pos}_reg_lambda_{meta_data['reg_lambda']}.json"
             with open(str(reg_lambda_output_file), 'w') as file:
-                json.dump(d, file, indent=4)
+                json.dump(d_temp, file, indent=4)
