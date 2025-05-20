@@ -13,9 +13,9 @@ from tqdm import tqdm
 from collections import defaultdict
 import sklearn.metrics as metrics
 
-from utils.data import FilePaths, load_antibiotic_data
-from utils.hooking import get_activations
-from utils.compatibility import ModelConfig
+from refactor.utils.data import FilePaths, load_antibiotic_data
+from refactor.utils.hooking import get_activations
+from refactor.utils.compatibility import ModelConfig
 
 class ClassificationProbe(nn.Module):
 
