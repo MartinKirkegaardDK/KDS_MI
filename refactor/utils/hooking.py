@@ -4,8 +4,8 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from tqdm import tqdm
 from collections import defaultdict
 
-from utils.compatibility import Hookpoints, HookAddress, ModelConfig, Device
-from utils.data import ActivationDataset
+from refactor.utils.compatibility import Hookpoints, HookAddress, ModelConfig, Device
+from refactor.utils.data import ActivationDataset
 
 import gc
 
