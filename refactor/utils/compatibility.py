@@ -1,13 +1,59 @@
 from transformers import GPTNeoXForCausalLM, GPT2LMHeadModel
 from enum import Enum
 
+
+
+class FilePaths:
+
+    antibiotic_folder = lambda lan: f'data/antibiotic/{lan}.txt'
+    bible_folder = lambda lan: f'data/bible/{lan}.xml'
+    
+
+    antibiotic = {
+        'da': antibiotic_folder('da'),
+        'en': antibiotic_folder('en'),
+        'is': antibiotic_folder('is'),
+        'sv': antibiotic_folder('sv'),
+        'nb': antibiotic_folder('nb')
+    }
+    bible = {
+        'da': bible_folder('da'),
+        'en': bible_folder('en'),
+        'is': bible_folder('is'),
+        'sv': bible_folder('sv'),
+        'nb': bible_folder('nb')
+    }
+    
+
+    @classmethod
+    def steering_vectors(cls, lan, hook_address, model):
+        _steering_vectors = {
+            GPTNeoXForCausalLM: f'steering_vectors/pythia/{lan}/combined/{hook_address}.pt',
+            GPT2LMHeadModel: f'steering_vectors/gpt-sw3/{lan}/combined/{hook_address}.pt'
+        }
+
+        return _steering_vectors[type(model)]
+
+
+class ModelName:
+
+    @staticmethod
+    def name(model):
+        names = {
+            GPTNeoXForCausalLM: f'pythia',
+            GPT2LMHeadModel: f'gpt-sw3'
+        }
+        return names[type(model)]
+
+
+
 class HookAddress(Enum):
-    layernorm_1_pre = 'layernorm_1:pre'
-    attention_pre = 'attention:pre'
-    attention_post = 'attention:post'
-    layernorm_2_pre = 'layernorm_2:pre'
-    mlp_pre = 'mlp:pre'
-    mlp_post = 'mlp:post'
+    layernorm_1_pre = 'layernorm_1-pre'
+    attention_pre = 'attention-pre'
+    attention_post = 'attention-post'
+    layernorm_2_pre = 'layernorm_2-pre'
+    mlp_pre = 'mlp-pre'
+    mlp_post = 'mlp-post'
 
     def layer(self, layer):
         return f'layer.{layer}.{self.value}'

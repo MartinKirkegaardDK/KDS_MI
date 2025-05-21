@@ -88,7 +88,7 @@ def main(model_url, device, layers=None, hook_addresses=None, out_file=None, lay
     model = AutoModelForCausalLM.from_pretrained(model_url).to(device)
     tokenizer = AutoTokenizer.from_pretrained(model_url)
 
-    loader = DataLoader(load_antibiotic_data(file_paths=FilePaths.antibiotic), shuffle=True, batch_size=32)
+    loader = DataLoader(load_antibiotic_data(), shuffle=True, batch_size=32)
 
     if not layers:
         layers = list(range(ModelConfig.hidden_layers(model)))

@@ -58,7 +58,7 @@ class HookManager():
 
         def steering_hook(module, input):
             if type(input) == tuple:
-                input = input[0]
+                return (input[0] + steering_vector * scalar,) +  input[1:]
             return input + steering_vector * scalar
         
         self.hooks.append(
@@ -69,7 +69,7 @@ class HookManager():
 
         def steering_hook(module, input, output):
             if type(output) == tuple:
-                output = output[0]
+                return (output[0] + steering_vector * scalar,) + output[1:]
             return output + steering_vector * scalar
         
         self.hooks.append(
@@ -78,7 +78,7 @@ class HookManager():
 
     def extract(self, hook_address):
 
-        address, placement = hook_address.split(':')
+        address, placement = hook_address.split('-')
 
         if placement == 'pre':
             return self._pre_extract(Hookpoints.from_address(address, self.model))
@@ -89,7 +89,7 @@ class HookManager():
     
     def steer(self, hook_address, steering_vector, scalar):
 
-        address, placement = hook_address.split(':')
+        address, placement = hook_address.split('-')
 
         if placement == 'pre':
             return self._pre_steer(Hookpoints.from_address(address, self.model), steering_vector, scalar)

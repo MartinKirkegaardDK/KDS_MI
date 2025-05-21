@@ -1,20 +1,10 @@
 import torch
 from torch.utils.data import Dataset, Subset
-from dataclasses import dataclass
 import random
+import xml.etree.ElementTree as ET
 
-import gc
+from utils.compatibility import FilePaths
 
-antibiotic_folder = lambda lan: f'data/antibiotic/{lan}.txt'
-
-class FilePaths:    
-    antibiotic = {
-        'da': antibiotic_folder('da'),
-        'en': antibiotic_folder('en'),
-        'is': antibiotic_folder('is'),
-        'sv': antibiotic_folder('sv'),
-        'nb': antibiotic_folder('nb')
-    }
 
 
 class ClassificationDataset(Dataset):
@@ -128,27 +118,66 @@ class ActivationDataset(ClassificationDataset):
     
 
 
+class ParallelNSPDataset(Dataset):
+    def __init__(self, sentence_pairs: dict[str, list[tuple]]):
+        assert len(set([len(language) for language in sentence_pairs.values()])) == 1 
+
+        self.sentence_pairs = sentence_pairs
+        self.languages = list(self.sentence_pairs.keys())
+
+    def __getitem__(self, index) -> tuple:
+        return {language: self.sentence_pairs[language][index] for language in self.languages}
+
+    def __len__(self) -> int:
+        return len(self.sentence_pairs[self.languages[0]])
+
+    @classmethod
+    def from_xml(cls, file_paths):
+
+        lan_codes = list(file_paths.keys())
+        xmls = {lan_code: ET.parse(file_paths[lan_code]) for lan_code in lan_codes}
 
 
-def load_antibiotic_data(
-        file_paths: dict[str, str],
-        file_extension='txt') -> AntibioticDataset:
+        verse_ids = {lan_code: [] for lan_code in lan_codes}
+        verse_texts = {lan_code: {} for lan_code in lan_codes}
+
+        for lan_code in lan_codes:
+            root = xmls[lan_code].getroot()
+            verses = root.findall(".//seg[@type='verse']")
+            for verse in verses:
+                verse_id = verse.get('id')
+                verse_ids[lan_code].append(verse_id)
+                verse_texts[lan_code][verse_id] = verse.text.strip()
+
+        # just to be sure
+        lan1, lan2 = lan_codes
+        lan2_verses = set(verse_ids[lan_codes[1]])
+        common_verses = [verse_id for verse_id in verse_ids[lan1] if verse_id in lan2_verses]
+
+        sentences = {lan_code: [verse_texts[lan_code][id_] for id_ in common_verses] for lan_code in lan_codes}
+
+        lan1_sentence_pairs = []
+        lan2_sentence_pairs = []
+
+        for i in range(len(common_verses) - 1):
+            lan1_sentence_pairs.append((sentences[lan1][i], sentences[lan1][i + 1]))
+            lan2_sentence_pairs.append((sentences[lan2][i], sentences[lan2][i + 1]))
+
+        new_obj = cls(sentence_pairs={lan1: lan1_sentence_pairs, lan2: lan2_sentence_pairs})
+
+        return new_obj
+    
+
+
+def load_antibiotic_data() -> AntibioticDataset:
     '''
     Loads text data from multiple language files.
-    
-    Args:
-        file_paths (dict): Language code to file path mappings where each key represents a language code (e.g., 'en', 'da', 'sv') and each value is the corresponding file path.
-        file_extention: str in {'txt', 'tml'}   
-        min_sentence_length: int for min amount of tokens in sentences loaded.
     
     Returns:
         TextClassificationDataset: a dataset for each language, with labels [0;n-1] corresponding to each language
     '''
 
-    lan_codes, file_paths = zip(*file_paths.items())
-
-    if file_extension != 'txt':
-        raise NotImplementedError('Other type extensions that "txt" have not been implemented')
+    lan_codes, file_paths = zip(*FilePaths.antibiotic.items())
     
     ds = AntibioticDataset.from_txt(file_paths[0], lan_codes[0])
 
@@ -157,3 +186,21 @@ def load_antibiotic_data(
             ds.add_from_txt(file_path, lan_code)
 
     return ds
+
+
+
+def load_bible_data(lan1, lan2):
+
+    ds = ParallelNSPDataset.from_xml(
+        file_paths={
+            lan1: FilePaths.bible[lan1],
+            lan2: FilePaths.bible[lan2]
+        }
+    )
+
+    return ds
+
+
+def load_steering_vector(lan, hook_address, model):
+    return torch.load(FilePaths.steering_vectors(lan, hook_address, model), map_location='cpu')
+
