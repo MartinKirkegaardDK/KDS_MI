@@ -1,13 +1,13 @@
 import torch
 from torch.utils.data import DataLoader
 import pickle
-from refactor.utils.data import FilePaths, load_antibiotic_data
 from refactor.utils.hooking import get_activations as get_activations_new
 from refactor.probes import model_setup
-import matplotlib.pyplot as plt
-import numpy as np
+from pathlib import Path
+from utils.preprocessing import load_txt_data
 
-def main(model_name,model_name_temp):
+
+def main(model_name:str,model_name_temp:str,hook_points:list):
 
 
     """This function runs an entire pipeline that bootstraps, trains and creates confidence intervals showing
@@ -27,11 +27,16 @@ def main(model_name,model_name_temp):
     print("Load model")
     model, tokenizer, device = model_setup(model_name)
 
+    data_folder = Path('data/preprocessed/train')
 
-    # loads data
-    print("Load data")
-    ds = load_antibiotic_data(
-        file_paths=FilePaths.antibiotic,
+    ds = load_txt_data(
+        file_paths={
+            'da': data_folder / 'da.txt',
+            'en': data_folder / 'en.txt',
+            'sv': data_folder / 'sv.txt',
+            'nb': data_folder / 'nb.txt',
+            'is': data_folder / 'is.txt'
+        },
         file_extension='txt'
     )
     loader = DataLoader(ds, batch_size=32, shuffle=True)
@@ -47,9 +52,7 @@ def main(model_name,model_name_temp):
         max_batches=20,
         sampling_prob=0.1
     )
-    
-    hook_points = ["attention:post","attention:pre","mlp:post","mlp:pre","layernorm_1:pre","layernorm_2:pre"]
-    
+        
     create_neuron_contributions(activations, hook_points,model_name_temp)
     
 
@@ -77,5 +80,7 @@ def create_neuron_contributions(activations:dict,hook_points:list, model_name_te
             
     with open(f'results/data/neuron_contributions/{model_name_temp}.pkl', 'wb') as f:
         pickle.dump(neuron_contributions, f)
+    #Make sure we delete it from memory
+    del neuron_contributions
 
 

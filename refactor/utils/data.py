@@ -3,7 +3,7 @@ from torch.utils.data import Dataset, Subset
 import random
 import xml.etree.ElementTree as ET
 
-from utils.compatibility import FilePaths
+from refactor.utils.compatibility import FilePaths
 
 
 
