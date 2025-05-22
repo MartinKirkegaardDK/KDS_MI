@@ -143,7 +143,6 @@ def get_activations(
         # extract activations
         extracted = dict()
         with HookManager(model) as hook_manager:
-
             for layer in layers:
                 for hook_address in hook_addresses:
                     extracted[hook_address.layer(layer)] = hook_manager.extract(hook_address.layer(layer))
@@ -175,8 +174,8 @@ def get_activations(
         # del label
 
         # gc.collect()
-        if Device.device(model) == torch.device('cuda:0'):
-            torch.cuda.empty_cache()
+        #if Device.device(model) == torch.device('cuda:0'):
+        #    torch.cuda.empty_cache()
             
     return activation_ds
 

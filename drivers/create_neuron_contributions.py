@@ -5,9 +5,9 @@ from refactor.utils.hooking import get_activations as get_activations_new
 from refactor.probes import model_setup
 from pathlib import Path
 from utils.preprocessing import load_txt_data
+from collections import Counter
 
-
-def main(model_name:str,model_name_temp:str,hook_points:list):
+def main(model_name:str,model_name_temp:str,hook_points:list, num_layers:int):
 
 
     """This function runs an entire pipeline that bootstraps, trains and creates confidence intervals showing
@@ -53,13 +53,45 @@ def main(model_name:str,model_name_temp:str,hook_points:list):
         sampling_prob=0.1
     )
         
-    create_neuron_contributions(activations, hook_points,model_name_temp)
+    create_neuron_contributions(activations, hook_points,model_name_temp,num_layers)
     
 
 
-def create_neuron_contributions(activations:dict,hook_points:list, model_name_temp: str):
+def create_neuron_contributions(activations:dict,hook_points:list, model_name_temp: str,num_layers):
+    print(activations)
+
     
-    num_layers = 5
+    top_idx_counter = Counter()
+    bot_idx_counter = Counter()
+
+    for layer in range(num_layers):
+        for hook in hook_points:
+
+            flat_tensor = torch.cat(activations[f"layer.{layer}.{hook}"].predictors, dim=0)
+
+            if flat_tensor.numel() == 0:
+                continue
+
+            # Top and bottom 10 values
+            top_vals, top_idxs = torch.topk(flat_tensor, k=10, largest=True)
+            bot_vals, bot_idxs = torch.topk(flat_tensor, k=10, largest=False)
+
+            # Count how often each index appears
+            top_idx_counter.update(top_idxs.tolist())
+            bot_idx_counter.update(bot_idxs.tolist())
+    
+    obj = dict()
+
+
+    obj["common_indices"] = set(top_idx_counter.keys()) & set(bot_idx_counter.keys())
+    obj["top_idx_counter"] = top_idx_counter
+    obj["bot_idx_counter"] = bot_idx_counter
+
+    with open(f'results/data/common_indices/{model_name_temp}.pkl', 'wb') as f:
+        pickle.dump(obj, f)
+    #Make sure we delete it from memory
+    del obj
+
     neuron_contributions = {}
 
     for layer in range(num_layers):
