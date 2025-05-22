@@ -1,5 +1,5 @@
 from torch.utils.data import DataLoader
-from refactor.utils.data import FilePaths, load_antibiotic_data
+from utils.preprocessing import load_txt_data
 from refactor.utils.hooking import get_activations as get_activations_new
 from refactor.utils.compatibility import ModelConfig
 from refactor.probes import model_setup
@@ -28,9 +28,16 @@ def idk(model_name,model_name_temp, reg_lambdas):
 
 
     # loads data
+    folder = lambda x: f'data/antibiotic/{x}.txt'
     print("Load data")
-    ds = load_antibiotic_data(
-        file_paths=FilePaths.antibiotic,
+    ds = load_txt_data(
+        file_paths={
+            'da': folder('da'),
+            'en': folder('en'),
+            'is': folder('is'),
+            'sv': folder('sv'),
+            'nb': folder('nb')
+        },
         file_extension='txt'
     )
     loader = DataLoader(ds, batch_size=32, shuffle=True)
