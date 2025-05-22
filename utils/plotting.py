@@ -118,11 +118,11 @@ def plot_probe_results(
     # Use a distinct color palette
     colors = plt.cm.Set1(range(len(map_lab)))
     colors_by_label = {
-        'en': colors[0],
-        'da': colors[1],
-        'sv': colors[2],
-        'nb': colors[3],
-        'is': colors[4]
+        'da': colors[0],
+        'en': colors[1],
+        'is': colors[2],
+        'sv': colors[3],
+        'nb': colors[4]
     }
     
     # Slightly offset x positions for different labels to avoid direct overlap
@@ -148,14 +148,15 @@ def plot_probe_results(
         # Fill the confidence interval with distinct patterns
         ax.fill_between(x_positions, lower_bound, upper_bound, 
                          alpha=0.2, color=colors_by_label[map_lab[label]], 
-                         hatch=['////', '\\\\\\\\', '.', '*', 'x', '+'][idx % 6],
-                         edgecolor='black', linewidth=0.5)
+                         #hatch=['////', '\\\\\\\\', '.', '*', 'x', '+'][idx % 6],
+                         #edgecolor='black', 
+                         linewidth=0.5)
     
     # Improve the overall appearance
     ax.set_title(f'f1-scores for reg_lambda={reg_lambda}', fontsize=16)
     ax.set_xlabel('Layer', fontsize=14)
     ax.set_ylabel('Accuracy', fontsize=14)
-    ax.grid(True, linestyle='--', alpha=0.7)
+    #ax.grid(True, linestyle='--', alpha=0.7)
     
     # Customize x-ticks to match the actual layer numbers
     ax.set_xticks(layers)
