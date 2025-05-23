@@ -19,7 +19,7 @@ def load_all_steering_vectors(path):
         all_steering_vectos[language].append(tensor)
     return all_steering_vectos
 
-def plot_distances(d: dict,target_language:str,type_distance:str, name = None):
+def plot_distances(d: dict,target_language:str,type_distance:str, ax, title='', labels=False):
     """_summary_
 
     Args:
@@ -30,40 +30,46 @@ def plot_distances(d: dict,target_language:str,type_distance:str, name = None):
     """
     
     # Create the plot with similar styling
-    plt.figure(figsize=(12, 8))
+    
+    
 
     # Use a distinct color palette
-    colors = plt.cm.tab10(np.linspace(0, 1, 10))
+    colors = plt.cm.Set1(range(5))
+    
+    color_map = {
+        'en': 1,
+        'is': 2,
+        'sv': 3,
+        'nb': 4
+    }
 
     # Slightly offset x positions for different labels to avoid direct overlap
     offset_step = 0.1
 
-    for idx, (key, values) in enumerate(d.items()):
+    for idx, key in enumerate(color_map):
+        values = d[key]
         x_positions = np.arange(len(values)) + (idx - (len(d) - 1) / 2) * offset_step
 
         # Plot the line with markers
-        plt.plot(x_positions, values, '-o', linewidth=2, markersize=8, color=colors[idx], label=key)
-
+        if labels:
+            ax.plot(x_positions, values, linewidth=1, color=colors[color_map[key]], label=key)
+        else:
+            ax.plot(x_positions, values, linewidth=1, color=colors[color_map[key]])
+            
     # Improve the overall appearance
-    plt.title('Vector distance across layers', fontsize=16)
-    plt.xlabel('Layer', fontsize=14)
-    plt.ylabel(f'{type_distance.capitalize()} distance to {target_language}', fontsize=14)
-    plt.grid(True, linestyle='--', alpha=0.7)
+    ax.set_title(title)
+    ax.set_xlabel('Layer')
+    ax.set_ylabel(f'{type_distance.capitalize()} distance to {target_language}')
 
     # Customize x-ticks to match indices
-    plt.xticks(np.arange(max(len(v) for v in d.values())))
+    #ax.set_xticks(np.arange(max(len(v) for v in d.values())))
 
-    # Add a legend with a semi-transparent background in a good position
-    plt.legend(fontsize=12, framealpha=0.8, loc='best')
-
-    plt.box(True)
-    #plt.ylim(0,)
     
-    plt.tight_layout()
+    #plt.tight_layout()
 
-    plt.savefig(f'results/activation_vector_distances/{name}_{type_distance}_{target_language}.png', bbox_inches='tight')
+    #plt.savefig(f'results/activation_vector_distances/{name}_{type_distance}_{target_language}.png', bbox_inches='tight')
 
-    plt.show()
+    #plt.show()
     
     
 def compute_distance_metric(all_steering_vectos:dict, target_language:str , distance_metric: str) -> dict:
@@ -86,7 +92,7 @@ def compute_distance_metric(all_steering_vectos:dict, target_language:str , dist
                 dist = euclidean(lang_vector.cpu(), da_vector.cpu())
                 d[language].append(dist)
                 
-    if distance_metric == "cosine":
+    elif distance_metric == "cosine":
         for language in all_steering_vectos.keys():
             if language == target_language:
                 continue
@@ -105,6 +111,6 @@ def compute_distance_metric(all_steering_vectos:dict, target_language:str , dist
                 dist = mahalanobis(lang_vector.cpu(), da_vector.cpu(),IV)
                 d[language].append(dist)
     else:
-        raise "The distance metric provided to the function is not allowed. Currently only euclidean, and mahalanobis are allowed"
+        raise Exception("The distance metric provided to the function is not allowed. Currently only euclidean, and mahalanobis are allowed")
     
     return d

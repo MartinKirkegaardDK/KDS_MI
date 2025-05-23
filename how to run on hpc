@@ -21,13 +21,13 @@ screen -ls
 scp hpc.itu.dk:scandeval_benchmark_results.jsonl .
 
 #Copy the folder to the hpc at root directory
-scp -r gpt_gptsw3_en_da_356m_gbs1024_with_steering hpc.itu.dk:
+scp -r gpt_gptsw3_en_da_356m_gbs1024_with_steering_lambda_5 hpc.itu.dk:
 
-scp -r gpt_gptsw3_en_da_is_356m_gbs1024_with_steering hpc.itu.dk:
+scp -r gpt_gptsw3_en_da_is_356m_gbs1024_with_steering_lambda_5 hpc.itu.dk:
 
-scp -r gpt_gptsw3_en_is_da_356m_gbs1024_with_steering hpc.itu.dk:
+scp -r gpt_gptsw3_en_is_da_356m_gbs1024_with_steering_lambda_5 hpc.itu.dk:
 
-scp -r gpt_sw3_356m_with_steering hpc.itu.dk:
+scp -r gpt_sw3_356m_with_steering_lambda_5 hpc.itu.dk:
 
 
 #Get list of resources
@@ -35,18 +35,13 @@ freeResources
 
 
 #idk, maybe this just works?? But before, remember to screen -a
-#srun --nodes=1 --ntasks-per-node=1 --gres gpu:a30 --mem=100G --time=02:00:00 --partition scavenge --pty bash -i singularity exec --nv /home/mamy/containers/scandeval-cuda126.sif scandeval -m "AI-Sweden-Models/gpt-sw3-356m" -l "da" --only-validation-split
-srun --nodes=1 --ntasks-per-node=1 --gres=gpu:a30 --mem=100G --time=02:00:00 --partition=scavenge singularity exec --nv /home/mamy/containers/scandeval-cuda126.sif scandeval -m "gpt_gptsw3_en_da_356m_gbs1024_with_steering" -l "da" --only-validation-split
-
-srun --nodes=1 --ntasks-per-node=1 --gres=gpu:a30 --mem=100G --time=02:00:00 --partition=scavenge singularity exec --nv /home/mamy/containers/scandeval-cuda126.sif scandeval -m "gpt_gptsw3_en_da_is_356m_gbs1024_with_steering" -l "da" --only-validation-split
-
-srun --nodes=1 --ntasks-per-node=1 --gres=gpu:a30 --mem=100G --time=02:00:00 --partition=scavenge singularity exec --nv /home/mamy/containers/scandeval-cuda126.sif scandeval -m "gpt_gptsw3_en_is_da_356m_gbs1024_with_steering" -l "da" --only-validation-split
-
-srun --nodes=1 --ntasks-per-node=1 --gres=gpu:a30 --mem=100G --time=02:00:00 --partition=scavenge singularity exec --nv /home/mamy/containers/scandeval-cuda126.sif scandeval -m "gpt_sw3_356m_with_steering" -l "da" --only-validation-split
-
-#this screen 2454904.pts-24.slurmhead runs gpt_gptsw3_en_da_356m_gbs1024_with_steering
-#this screen 2455745.pts-24.slurmhead runs gpt_gptsw3_en_da_is_356m_gbs1024 
-#this screen 2456310.pts-24.slurmhead runs gpt_gptsw3_en_da_is_356m_gbs1024
-#this screen 2456817.pts-24.slurmhead runs gpt_sw3_356m_with_steering
+srun --nodes=1 --ntasks-per-node=1 --gres=gpu:a30 --mem=100G --time=02:00:00 --partition=scavenge singularity exec --nv /home/mamy/containers/scandeval-cuda126.sif scandeval -m "gpt_gptsw3_en_da_356m_gbs1024_with_steering_lambda_5" -l "da" --only-validation-split
+srun --nodes=1 --ntasks-per-node=1 --gres=gpu:a30 --mem=100G --time=02:00:00 --partition=scavenge singularity exec --nv /home/mamy/containers/scandeval-cuda126.sif scandeval -m "gpt_gptsw3_en_da_is_356m_gbs1024_with_steering_lambda_5" -l "da" --only-validation-split
+srun --nodes=1 --ntasks-per-node=1 --gres=gpu:a30 --mem=100G --time=02:00:00 --partition=scavenge singularity exec --nv /home/mamy/containers/scandeval-cuda126.sif scandeval -m "gpt_gptsw3_en_is_da_356m_gbs1024_with_steering_lambda_5" -l "da" --only-validation-split
+srun --nodes=1 --ntasks-per-node=1 --gres=gpu:a30 --mem=100G --time=02:00:00 --partition=scavenge singularity exec --nv /home/mamy/containers/scandeval-cuda126.sif scandeval -m "gpt_sw3_356m_with_steering_lambda_5" -l "da" --only-validation-split
 
 
+#this screen 3922984.pts-36.slurmhead runs gpt_gptsw3_en_da_356m_gbs1024_with_steering_lambda_5
+#this screen 3923530.pts-36.slurmhead runs gpt_gptsw3_en_da_is_356m_gbs1024_with_steering_lambda_5
+#this screen 3924081.pts-36.slurmhead runs gpt_gptsw3_en_da_is_356m_gbs1024_with_steering_lambda_5
+#this screen 3924802.pts-36.slurmhead runs gpt_gptsw3_en_da_is_356m_gbs1024_with_steering_lambda_5

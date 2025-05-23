@@ -16,6 +16,19 @@ def plot_text_viz(input_text:str,language_arg:str, model_name_temp:str,layer:int
         'sv': 'orange',
         "da": "pink"
     }
+    
+        # Use a distinct color palette
+    colors = plt.cm.Set1(range(5))
+    
+    language_colors = {
+        "da": colors[0],
+        'en': colors[1],
+        'is': colors[2],
+        'sv': colors[3],
+        'nb': colors[4]
+    }
+    
+    
 
     fig, ax = plt.subplots(figsize=(15, 5))
     fig.patch.set_facecolor('white')
