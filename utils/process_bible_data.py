@@ -17,13 +17,14 @@ def combine_bible_data(bible_dat_path: str, language_prediction_model: _FastText
     path = bible_dat_path
     
     for file in os.listdir(path):
-        if "combined" in file:
+        if ("combined" in file) or (".DS_Store" in file):
             continue
-
+        #print(file)
         li.append(pd.read_csv(f"{path}/{file}"))
     loaded_df = pd.concat(li)
     danish_prompt_score_list = []
     english_prompt_score_list =[]
+    danish_language_prediction_on_english_steered = []
     
     for _, row in loaded_df.iterrows():
         danish_prompt = row["danish_predicted_output"]
@@ -34,9 +35,23 @@ def combine_bible_data(bible_dat_path: str, language_prediction_model: _FastText
         english_prompt = row["english_predicted_output"]
         prediction = predict_language(language_prediction_model,"__label__eng",english_prompt)
         english_prompt_score_list.append(round(prediction,2))
-
+        
+        english_prompt = row["english_predicted_output"]
+        prediction = predict_language(language_prediction_model,"__label__dan",english_prompt)
+        danish_language_prediction_on_english_steered.append(round(prediction,2))
+        
+    #danish_prompt_score is the probability of the language being danish.
+    #This is computed on the model getting danish as input. The idea is we want a baseline for the amount of time
+    #the model predicts danish
+    
+    #english_prompt_score is the model steered towards danish but having english as input. Here we can see
+    #how often the model still replies in english
+    
+    #danish_language_prediction_on_english_steered is to test how often the model being steered towards danish
+    #with english input is actually danish
     loaded_df["danish_prompt_score"] = danish_prompt_score_list
     loaded_df["english_prompt_score"] = english_prompt_score_list
+    loaded_df["danish_language_prediction_on_english_steered"] = danish_language_prediction_on_english_steered
     loaded_df.to_csv(path + "bible_data_combined.csv", index = False)
     
 

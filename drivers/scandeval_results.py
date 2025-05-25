@@ -4,10 +4,11 @@ from utils.scandeval_results import get_confidence_interval, plot
 from itertools import product
     
 
-def main(scandeval_path: str, with_steering: bool):
+def main(scandeval_path: str,with_steering: bool,  model_names:list[str]|None):
     """
     creates the plots for the scandeval results.
     Saves the plots at results/scandeval/with(out)_steering_nlg.png
+    model_name example: gpt_sw3_356m_with_steering_lambda_5
     """
 
     #scandeval = "results/scandeval/scandeval_benchmark_results_new.jsonl"
@@ -21,6 +22,8 @@ def main(scandeval_path: str, with_steering: bool):
                 data.append(json.loads(line))
 
     df = pd.DataFrame(data)
+    if model_names != None:
+        df = df[df["model"].isin(model_names)]
 
     ds_filter = {
         "angry-tweets":"mcc",
@@ -44,13 +47,16 @@ def main(scandeval_path: str, with_steering: bool):
     li = []
     for ds, m in combinations:
         mask = (df.model == m) & (df.dataset == ds)
-        metric = ds_filter[ds]
-        task = df[mask].task.iloc[0]
-        #value = df[mask].iloc[0].results["total"][metric]
-        data = df[mask].iloc[0].results["raw"]["test"]
+        try:
+            metric = ds_filter[ds]
+            task = df[mask].task.iloc[0]
+            #value = df[mask].iloc[0].results["total"][metric]
+            data = df[mask].iloc[0].results["raw"]["test"]
 
-        min_value, average_value, max_value = get_confidence_interval(data, metric)
-        li.append((m, ds, metric, min_value, average_value, max_value, task))
+            min_value, average_value, max_value = get_confidence_interval(data, metric)
+            li.append((m, ds, metric, min_value, average_value, max_value, task))
+        except:
+            print(ds, m)
         
     df = pd.DataFrame(li, columns=["Model", "Dataset", "Metric", "Min", "Avg","Max", "Task"])
     plot(df, with_steering)
