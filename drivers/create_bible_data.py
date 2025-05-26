@@ -37,22 +37,25 @@ def run(model_name: str,
 
     for bible_verse in range(start_verse, end_verse):
         temp_d = defaultdict(list)
-        #we run each verse 5 times
+        #we run each verse 2 times
         for _ in range(2):
             print(_)
             for lambda_amount in lambda_search_space:
-                for layer in range(model.config.num_hidden_layers):
-                        danish_predicted_output, english_predicted_output, danish_true_label,english_true_label = gen_outputs(bible_data, language1,language2,bible_verse,layer,combined,lambda_amount, model,tokenizer)
-                        
-                        temp_d["danish_predicted_output"].append(danish_predicted_output)
-                        temp_d["english_predicted_output"].append(english_predicted_output)
-                        temp_d["danish_true_label"].append(danish_true_label)
-                        temp_d["english_true_label"].append(english_true_label)
-                        temp_d["layer"].append(layer)
-                        temp_d["lambda_amount"].append(lambda_amount)
-                        temp_d["bible_verse"].append(bible_verse)
+                
+                
+                #for layer in range(model.config.num_hidden_layers):
+                layer = 15
+                danish_predicted_output, english_predicted_output, danish_true_label,english_true_label = gen_outputs(bible_data, language1,language2,bible_verse,layer,combined,lambda_amount, model,tokenizer)
+                
+                temp_d["danish_predicted_output"].append(danish_predicted_output)
+                temp_d["english_predicted_output"].append(english_predicted_output)
+                temp_d["danish_true_label"].append(danish_true_label)
+                temp_d["english_true_label"].append(english_true_label)
+                temp_d["layer"].append(layer)
+                temp_d["lambda_amount"].append(lambda_amount)
+                temp_d["bible_verse"].append(bible_verse)
         df = pd.DataFrame(temp_d)
-        df.to_csv(f"results/data/steering_data_bible/verse_{bible_verse}.csv", index = False)
+        df.to_csv(f"results/data/steering_data_bible/verse_{bible_verse}_no_lambda.csv", index = False)
 
 
 
