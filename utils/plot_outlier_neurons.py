@@ -85,7 +85,7 @@ def plot_neuron_contributions(num_layers:int, hook_points:list, model_name_temp:
     plt.gca().yaxis.set_major_locator(ticker.MaxNLocator(integer=True))
 
     # Add horizontal gridlines
-    plt.grid(True, axis='y', linestyle='--', alpha=0.6)
+    #plt.grid(True, axis='y', linestyle='--', alpha=0.6)
 
     # Annotate each bar with its neuron index
     for idx, bar in zip(neuron_indices, bars):

@@ -1,10 +1,10 @@
 import json
 import pandas as pd
-from utils.scandeval_results import get_confidence_interval, plot
+from utils.scandeval_results import get_confidence_interval, plot_cool
 from itertools import product
     
 
-def main(scandeval_path: str,with_steering: bool,  model_names:list[str]|None):
+def main(scandeval_path: str,model_names:list[str]|None):
     """
     creates the plots for the scandeval results.
     Saves the plots at results/scandeval/with(out)_steering_nlg.png
@@ -59,7 +59,7 @@ def main(scandeval_path: str,with_steering: bool,  model_names:list[str]|None):
             print(ds, m)
         
     df = pd.DataFrame(li, columns=["Model", "Dataset", "Metric", "Min", "Avg","Max", "Task"])
-    plot(df, with_steering)
+    plot_cool(df)
     
 
 if __name__ == "__main__":
