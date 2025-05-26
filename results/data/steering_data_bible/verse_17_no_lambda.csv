@@ -1,0 +1,5 @@
+danish_predicted_output,english_predicted_output,danish_true_label,english_true_label,layer,lambda_amount,bible_verse
+" Vi skulle være lysets fyrster!
+Og hvis lysets fyrste ønskede at vi skulle overgive os til ham ville det være en stor fejl",                                                                                                                                                  ,"Og det blev Aften, og det blev Morgen, fjerde Dag.","There was evening and there was morning, a fourth day.",15,0,17
+" Han gav ham en hel by med alt hvad, han søgte efter.
+(1 Kings 15: 28-38) Men",                                                                                                                                                  ,"Og det blev Aften, og det blev Morgen, fjerde Dag.","There was evening and there was morning, a fourth day.",15,0,17

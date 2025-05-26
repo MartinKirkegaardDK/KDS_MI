@@ -1,0 +1,5 @@
+danish_predicted_output,english_predicted_output,danish_true_label,english_true_label,layer,lambda_amount,bible_verse
+". ->
+19 And the sons of Noah were three; and from them all the people of the earth was formed.<|endoftext|>",".  5:18 Og de tre, som var sønner av Noa, var alle jordens innbyggere.<|endoftext|>","Noa var Agerdyrker og den første, der plantede en Vingård.","Noah began to be a farmer, and planted a vineyard.",15,0,224
+".
+29:23 De to sønnernes ætt blev igjen ennu et år hos sin far og fikk ikke barn.<|endoftext|>", The only people that remained were the descendants of the first people.                                                                                                                                        ,"Noa var Agerdyrker og den første, der plantede en Vingård.","Noah began to be a farmer, and planted a vineyard.",15,0,224

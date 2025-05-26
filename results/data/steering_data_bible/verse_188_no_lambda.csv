@@ -1,0 +1,6 @@
+danish_predicted_output,english_predicted_output,danish_true_label,english_true_label,layer,lambda_amount,bible_verse
+.<|endoftext|>,.<|endoftext|>,"Da der var gået fyrretyve Dage: åbnede Noa den Luge, han havde lavet på Arken,","It happened at the end of forty days, that Noah opened the window of the ship which he had made,",15,0,188
+"
+svensk:
+Under denna tid ska du inte överskrida måttenheten (exempelvis, till och med två dagar med två dagars mellanrum).
+",.<|endoftext|>,"Da der var gået fyrretyve Dage: åbnede Noa den Luge, han havde lavet på Arken,","It happened at the end of forty days, that Noah opened the window of the ship which he had made,",15,0,188

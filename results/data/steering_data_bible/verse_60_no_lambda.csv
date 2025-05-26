@@ -1,0 +1,7 @@
+danish_predicted_output,english_predicted_output,danish_true_label,english_true_label,layer,lambda_amount,bible_verse
+"
+7 ""Bekæmp det onde, for eders synders skyld; thi Gud har givet os det ene øres og det andet øras",""" på svenska: Gud vet att när du äter det, dina ögon kommer att öppnas, och du kommer att vara som gud, vet gott och ont.<|endoftext|>","Kvinden blev nu var, at Træet var godt at spise af, en Lyst for Øjnene og godt at få Forstand af; og hun tog af dets Frugt og spiste og gav også sin Mand, der stod hos hende, og han spiste.","When the woman saw that the tree was good for food, and that it was a delight to the eyes, and that the tree was to be desired to make one wise, she took of its fruit, and ate; and she gave some to her husband with her, and he ate.",15,0,60
+"
+
+3. English: They had to go all the way to Mexico to find them.
+Danish: De var nødt til at køre hele","""    What the fuck is this?<|endoftext|>","Kvinden blev nu var, at Træet var godt at spise af, en Lyst for Øjnene og godt at få Forstand af; og hun tog af dets Frugt og spiste og gav også sin Mand, der stod hos hende, og han spiste.","When the woman saw that the tree was good for food, and that it was a delight to the eyes, and that the tree was to be desired to make one wise, she took of its fruit, and ate; and she gave some to her husband with her, and he ate.",15,0,60

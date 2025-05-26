@@ -1,0 +1,3 @@
+danish_predicted_output,english_predicted_output,danish_true_label,english_true_label,layer,lambda_amount,bible_verse
+" 22 Derfor kan den, der tager imod dem, blive udvalgt til at dele deres frugt og blive i dem og i Guds rige og få evigt","  ""And now,"" said the Pharisee, ""take heed, for I will send you to the land of Egypt, and will send you to the land of Judah, and will send you to the land of Samaria, and will send you to the land of the Philistines, and will send you to","Og det blev Aften, og det blev Morgen, femte Dag.","There was evening and there was morning, a fifth day.",15,0,21
+"""<|endoftext|>","""<|endoftext|>","Og det blev Aften, og det blev Morgen, femte Dag.","There was evening and there was morning, a fifth day.",15,0,21

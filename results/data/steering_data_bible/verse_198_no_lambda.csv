@@ -1,0 +1,5 @@
+danish_predicted_output,english_predicted_output,danish_true_label,english_true_label,layer,lambda_amount,bible_verse
+" ""Naar du seer til din søn og dine brødre og din kone och dine døtre og dine søskende og dine hustruer og dine "," ""I am not a god, I am a man, and I am not a man.""    The people in this case are not God, they are human beings.    This is how the Bible teaches that god is not a human being.    A:    In the NT, God is not a human being.  The Bible does not say that God is not a human being.  Instead, the Bible says that God is not","""Gå ud af Arken med din Hustru, dine Sønner og dine Sønnekoner","""Go out of the ship, you, and your wife, and your sons, and your sons' wives with you.",15,0,198
+"
+11 ""Vær dig selv, for du skal frelse dig. -> 11 Då sa Gud till Noa:
+12.",", 'I will not go into the house of the Lord; I will not enter the house of the Lord.' So Noah and the people went out of the house of the Lord, and went into the house of the Lord.<|endoftext|>","""Gå ud af Arken med din Hustru, dine Sønner og dine Sønnekoner","""Go out of the ship, you, and your wife, and your sons, and your sons' wives with you.",15,0,198

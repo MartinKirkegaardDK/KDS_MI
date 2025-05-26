@@ -41,8 +41,8 @@ def gen_outputs(bible_data:ParallelNSPDataset,
     language_1_prompt = bible_data[bible_index][language_1][0].lower()
     language_1_true_bible_verse = bible_data[bible_index][language_1][1]
     
-    #IT SHOULD BE LANGUAGE 1 SINCE WE WANT TO STEAR TOWARDS LANGUAGE 1
-    language_2_prompt = bible_data[bible_index][language_1][0].lower()
+
+    language_2_prompt = bible_data[bible_index][language_2][0].lower()
     language_2_true_bible_verse = bible_data[bible_index][language_2][1]
     
     input_ids = tokenizer(language_1_prompt, return_tensors="pt")["input_ids"].to(device)
