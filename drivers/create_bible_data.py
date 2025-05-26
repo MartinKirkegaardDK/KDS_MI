@@ -33,7 +33,7 @@ def run(model_name: str,
     
     bible_data = ParallelNSPDataset.from_tmx("data/bible-da-en.tmx",language1,"en")
 
-    target, complement, combined = load_targeted_steering_vectors(steering_vector_path)
+    target, complement, combined = load_targeted_steering_vectors(steering_vector_path,device)
 
     for bible_verse in range(start_verse, end_verse):
         temp_d = defaultdict(list)
