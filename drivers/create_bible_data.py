@@ -45,7 +45,7 @@ def run(model_name: str,
                 
                 #for layer in range(model.config.num_hidden_layers):
                 layer = 15
-                danish_predicted_output, english_predicted_output, danish_true_label,english_true_label = gen_outputs(bible_data, language1,language2,bible_verse,layer,combined,lambda_amount, model,tokenizer)
+                danish_predicted_output, english_predicted_output, danish_true_label,english_true_label = gen_outputs(bible_data, language1,language2,bible_verse,layer,combined,lambda_amount, model,tokenizer,device)
                 
                 temp_d["danish_predicted_output"].append(danish_predicted_output)
                 temp_d["english_predicted_output"].append(english_predicted_output)

@@ -16,7 +16,8 @@ def gen_outputs(bible_data:ParallelNSPDataset,
                 steering_vector:torch.Tensor,
                 steering_lambda:int,
                 model:AutoModelForCausalLM,
-                tokenizer:AutoTokenizer) -> tuple:
+                tokenizer:AutoTokenizer,
+                device:str) -> tuple:
     """Inserts a steering vector and shifts the model towards that direction. 
     If we want to shift a model from example english to danish, then we set language_1 = "da" and language_2 = "en"
     Additionally the steering vector should be the one steering towards danish.
@@ -44,7 +45,7 @@ def gen_outputs(bible_data:ParallelNSPDataset,
     language_2_prompt = bible_data[bible_index][language_1][0].lower()
     language_2_true_bible_verse = bible_data[bible_index][language_2][1]
     
-    input_ids = tokenizer(language_1_prompt, return_tensors="pt")["input_ids"]
+    input_ids = tokenizer(language_1_prompt, return_tensors="pt")["input_ids"].to(device)
     generated_token_ids = model.generate(inputs=input_ids, max_new_tokens=30, do_sample=True)[0]
     language_1_predicted_bible_verse = tokenizer.decode(generated_token_ids)[len(language_1_prompt):]
     
