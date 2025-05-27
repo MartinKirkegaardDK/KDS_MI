@@ -22,30 +22,53 @@ def combine_bible_data(bible_dat_path: str, language_prediction_model: _FastText
         #print(file)
         li.append(pd.read_csv(f"{path}/{file}"))
     loaded_df = pd.concat(li)
-    loaded_df = pd.read_csv("results\data\steering_data_bible\cleaned_final.csv")
+    loaded_df = pd.read_csv(r"results/data/steering_data_bible/cleaned_final.csv")
     
     danish_prompt_score_list = []
     english_prompt_score_list =[]
+    english_score_on_danish_prompt = []
     danish_language_prediction_on_english_steered = []
     english_predicted_output_without_steering = []
+    danish_score_on_english_prompt_without_steering = []
     
     for _, row in loaded_df.iterrows():
+        #Danish prompt, danish label no steering
         danish_prompt = row["danish_predicted_output"]
         danish_prompt = danish_prompt.replace("\n","")
-        prediction = predict_language(language_prediction_model,language_label,danish_prompt)
+        prediction = predict_language(language_prediction_model,"__label__dan",danish_prompt)
         danish_prompt_score_list.append(round(prediction, 2))
         
+        
+        #Danish prompt, english label, no steering
+        english_prompt = row["danish_predicted_output"]
+        english_prompt = english_prompt.replace("\n","")
+        prediction = predict_language(language_prediction_model,"__label__eng",english_prompt)
+        english_score_on_danish_prompt.append(round(prediction,2))
+        
+        #English prompt, english label, with steering
         english_prompt = row["english_predicted_output"]
         prediction = predict_language(language_prediction_model,"__label__eng",english_prompt)
         english_prompt_score_list.append(round(prediction,2))
-
+        
+        #English prompt, english label, no steering
         english_prompt = row["english_predicted_output_without_steering"]
         prediction = predict_language(language_prediction_model,"__label__eng",english_prompt)
         english_predicted_output_without_steering.append(round(prediction,2))
         
+        #English prompt, danish label, no steering
+        english_prompt = row["english_predicted_output_without_steering"]
+        prediction = predict_language(language_prediction_model,"__label__dan",english_prompt)
+        danish_score_on_english_prompt_without_steering.append(round(prediction,2))
+        
+        #English prompt, danish label, with steering        
         english_prompt = row["english_predicted_output"]
         prediction = predict_language(language_prediction_model,"__label__dan",english_prompt)
         danish_language_prediction_on_english_steered.append(round(prediction,2))
+        
+        #With steering
+        #danish_language_prediction_on_english_steered, english_prompt_score_list
+        #without
+        #danish_score_on_english_prompt_without_steering, english_predicted_output_without_steering
         
     #danish_prompt_score is the probability of the language being danish.
     #This is computed on the model getting danish as input. The idea is we want a baseline for the amount of time
@@ -59,7 +82,9 @@ def combine_bible_data(bible_dat_path: str, language_prediction_model: _FastText
     loaded_df["danish_prompt_score"] = danish_prompt_score_list
     loaded_df["english_prompt_score"] = english_prompt_score_list
     loaded_df["danish_language_prediction_on_english_steered"] = danish_language_prediction_on_english_steered
-    loaded_df["english_predicted_output_without_steering"] = english_predicted_output_without_steering
+    loaded_df["english_predicted_output_without_steering_score"] = english_predicted_output_without_steering
+    loaded_df["english_score_on_danish_prompt"] = english_score_on_danish_prompt
+    loaded_df["danish_score_on_english_prompt_without_steering"] = danish_score_on_english_prompt_without_steering
     loaded_df.to_csv(path + "bible_data_combined.csv", index = False)
     
 
