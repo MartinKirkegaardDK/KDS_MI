@@ -17,7 +17,7 @@ def run(model_name_temp:str, target_language: str, steering_vector_path:str ,dis
     
 
     all_steering_vectos = load_all_steering_vectors(steering_vector_path)
-    fig, axs = plt.subplots(1, 3, figsize=(10, 3))
+    fig, axs = plt.subplots(1, 2, figsize=(10, 3))
     axs = axs.flatten()
    
 
@@ -29,9 +29,9 @@ def run(model_name_temp:str, target_language: str, steering_vector_path:str ,dis
     distance_dict = compute_distance_metric(all_steering_vectos, target_language, metric)
     plot_distances(distance_dict,target_language,metric,ax=axs[1], title=f'{metric.capitalize()} distance')
     
-    metric = 'mahalanobis'
-    distance_dict = compute_distance_metric(all_steering_vectos, target_language, metric)
-    plot_distances(distance_dict,target_language,metric,ax=axs[2], title=f'{metric.capitalize()} distance')
+    #metric = 'mahalanobis'
+    #distance_dict = compute_distance_metric(all_steering_vectos, target_language, metric)
+    #plot_distances(distance_dict,target_language,metric,ax=axs[2], title=f'{metric.capitalize()} distance')
     
     fig.legend(bbox_to_anchor=(0.5, 0), loc='upper center', ncol=4, title='language')
     fig.tight_layout()
