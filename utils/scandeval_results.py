@@ -89,6 +89,7 @@ def plot_cool(df:pd.DataFrame):
             if "gpt_gpt" in base_model:
                 base_model = base_model.replace("gpt_gpt","gpt_")
                 base_model = base_model.replace("_gbs1024","")
+            base_model = base_model.replace("gpt_sw3", "GPT-SW3")
             group_sorted = group.sort_values('Model')
             for _, row in group_sorted.iterrows():
                 yerr = [[row['Avg'] - row['Min']], [row['Max'] - row['Avg']]]
