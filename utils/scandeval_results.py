@@ -85,6 +85,10 @@ def plot_cool(df:pd.DataFrame):
         spacing = 1.5
 
         for base_model, group in grouped:
+            
+            if "gpt_gpt" in base_model:
+                base_model = base_model.replace("gpt_gpt","gpt_")
+                base_model = base_model.replace("_gbs1024","")
             group_sorted = group.sort_values('Model')
             for _, row in group_sorted.iterrows():
                 yerr = [[row['Avg'] - row['Min']], [row['Max'] - row['Avg']]]
@@ -98,6 +102,8 @@ def plot_cool(df:pd.DataFrame):
                 # Collect unique legend elements
                 if base_model not in legend_labels:
                     legend_handles.append(handle)
+
+
                     legend_labels.append(base_model)
                 
                 current_x += 1

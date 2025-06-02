@@ -29,7 +29,7 @@ def main(scandeval_path: str,model_names:list[str]|None):
         "angry-tweets":"mcc",
         "dansk": "micro_f1",#Should we include the no misc ??
         "scala-da": "mcc",
-        "scandiqa-da": "f1", #We use this as it is more lenient compared to exact matching
+        "scandiqa-da": "em", #We use this as it is more lenient compared to exact matching
         "nordjylland-news": "bertscore", #bertscore apparently more aligns with human evals compared to rouge - scandeval
         "danske-talemaader": "mcc",
         "danish-citizen-tests": "mcc",
