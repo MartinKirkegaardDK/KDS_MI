@@ -1,5 +1,5 @@
 from fasttext.FastText import _FastText
-from classes.datahandling import ParallelNSPDataset
+from src.classes.datahandling import ParallelNSPDataset
 from transformers import AutoModelForCausalLM,AutoTokenizer
 import torch
 from src.utils.old.steering import generate_with_steering

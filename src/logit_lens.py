@@ -13,12 +13,7 @@ from collections import defaultdict
 
 
 
-def plot_logit_lens():
-    model_url = 'EleutherAI/pythia-14m'
-    device = 'cpu'
-
-    model_url = 'AI-Sweden-Models/gpt-sw3-356m'
-    device = 'cuda'
+def plot_logit_lens(model_url, device):
 
     model = AutoModelForCausalLM.from_pretrained(model_url).to(device)
     tokenizer = AutoTokenizer.from_pretrained(model_url)
@@ -99,13 +94,7 @@ def plot_logit_lens():
 
 
 
-def plot_norm_of_logits():
-
-    model_url = 'EleutherAI/pythia-14m'
-    device = 'cpu'
-
-    model_url = 'AI-Sweden-Models/gpt-sw3-356m'
-    device = 'cuda'
+def plot_norm_of_logits(model_url, device):
 
     model = AutoModelForCausalLM.from_pretrained(model_url).to(device)
     tokenizer = AutoTokenizer.from_pretrained(model_url)

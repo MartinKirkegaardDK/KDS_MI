@@ -1,4 +1,4 @@
-from classes.datahandling import TextClassificationDataset
+from src.classes.datahandling import TextClassificationDataset
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from torch.utils.data import DataLoader
 from src.utils.new.hooking import get_activations
