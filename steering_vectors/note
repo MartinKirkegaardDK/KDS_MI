@@ -1,3 +1,0 @@
-These are the steering vectors towards languages, if we want to steer a model towards language DA,
-then we can use the steering vectors in this folder.
-For the average activations that are used to create these vectors, navigate to average_activations folder
