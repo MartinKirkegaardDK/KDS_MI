@@ -3,7 +3,7 @@ from collections import defaultdict
 
 from statistics import mean
 from matplotlib import pyplot as plt
-from utils.new.compatibility import *
+from src.utils.new.compatibility import *
 import matplotlib.colors as mcolors
 import numpy as np
 from scipy.stats import sem, t
